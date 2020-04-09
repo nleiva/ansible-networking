@@ -25,6 +25,11 @@
       notify: Display Output
       when: ansible_net_system == "ios"
 
+    - name: Display OUTPUT
+      debug:
+        msg: Version is {{ version_output.stdout[0] | regex_search("version", multiline=True, ignorecase=True)}}
+
+# handler won't be called if mp changes are made
   handlers:
     - name: Display Output
       debug:
