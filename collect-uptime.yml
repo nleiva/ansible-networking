@@ -8,10 +8,10 @@
       cli_command:
         command:  show version | i ersion
       register: version_output
-      when: ansible_net_system != "iosxr"
+      when: ansible_net_system != "nxos"
 
     - name: Display OUTPUT
       debug:
-        msg: Output is {{ version_output.stdout[0] }}
+        msg: Output is {{ version_output.stdout }}
 
 ...
