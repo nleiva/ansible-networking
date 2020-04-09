@@ -1,0 +1,35 @@
+---
+
+-
+  hosts: infrastructure
+ 
+  tasks: 
+    - name: Capture SHOW VERSION on IOS XR
+      iosxr_command:
+        command:  show version
+      register: version_output
+      notify: Done
+      when: ansible_net_system == "iosxr"
+
+    - name: Capture SHOW VERSION on NX-OS
+      nxos_command:
+        command:  show version
+      register: version_output
+      notify: Done
+      when: ansible_net_system == "nxos"
+
+    - name: Capture SHOW VERSION on IOS
+      ios_command:
+        command:  show version
+      register: version_output
+      notify: Done
+      when: ansible_net_system == "ios"
+
+  handlers:
+    - name: Done
+      debug:
+        msg: 
+          - The data was captured on {{ ansible_net_hostname }} 
+          - Output --> {{ version_output.stdout[0] | regex_search("version", multiline=True, ignorecase=True)}}
+
+...
