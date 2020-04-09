@@ -6,21 +6,21 @@
   tasks: 
     - name: Capture SHOW VERSION on IOS XR
       iosxr_command:
-        command:  show version
+        commands:  show version
       register: version_output
       notify: Done
       when: ansible_net_system == "iosxr"
 
     - name: Capture SHOW VERSION on NX-OS
       nxos_command:
-        command:  show version
+        commands:  show version
       register: version_output
       notify: Done
       when: ansible_net_system == "nxos"
 
     - name: Capture SHOW VERSION on IOS
       ios_command:
-        command:  show version
+        commands:  show version
       register: version_output
       notify: Done
       when: ansible_net_system == "ios"
