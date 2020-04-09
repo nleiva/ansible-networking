@@ -6,28 +6,28 @@
   tasks: 
     - name: Capture SHOW VERSION on IOS XR
       iosxr_command:
-        commands:  show version
+        commands:  show version | i Version
       register: version_output
       notify: Display Output
       when: ansible_net_system == "iosxr"
 
     - name: Capture SHOW VERSION on NX-OS
       nxos_command:
-        commands:  show version
+        commands:  show version | i version
       register: version_output
       notify: Display Output
       when: ansible_net_system == "nxos"
 
     - name: Capture SHOW VERSION on IOS
       ios_command:
-        commands:  show version
+        commands:  show version | i Version
       register: version_output
       notify: Display Output
       when: ansible_net_system == "ios"
 
     - name: Display OUTPUT
       debug:
-        msg: Version is {{ version_output.stdout[0] | regex_search("version", multiline=True, ignorecase=True)}}
+        msg: Output is {{ version_output.stdout[0] }}
 
 # handler won't be called if mp changes are made
   handlers:
