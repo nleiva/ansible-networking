@@ -8,25 +8,25 @@
       iosxr_command:
         commands:  show version
       register: version_output
-      notify: Done
+      notify: Display Output
       when: ansible_net_system == "iosxr"
 
     - name: Capture SHOW VERSION on NX-OS
       nxos_command:
         commands:  show version
       register: version_output
-      notify: Done
+      notify: Display Output
       when: ansible_net_system == "nxos"
 
     - name: Capture SHOW VERSION on IOS
       ios_command:
         commands:  show version
       register: version_output
-      notify: Done
+      notify: Display Output
       when: ansible_net_system == "ios"
 
   handlers:
-    - name: Done
+    - name: Display Output
       debug:
         msg: 
           - The data was captured on {{ ansible_net_hostname }} 
