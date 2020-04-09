@@ -6,8 +6,9 @@
   tasks: 
     - name: Capture SHOW VERSION
       cli_command:
-        commands:  show version | i ersion
+        command:  show version | i ersion
       register: version_output
+      when: ansible_net_system != "iosxr"
 
     - name: Display OUTPUT
       debug:
