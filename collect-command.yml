@@ -4,7 +4,7 @@
   hosts: infrastructure
  
   tasks: 
-    - name: Capture SHOW VERSION
+    - name: Capture SHOW COMMAND
       cli_command:
         command:  {{ my_cmd }}
       register: version_output
