@@ -8,11 +8,11 @@
       cli_command:
         command:  "{{ my_cmd }}"
       register: version_output
-      when: ansible_net_system != "nxos"
+      #when: ansible_net_system != "nxos"
 
     - name: Display OUTPUT
       debug:
         msg: Output is {{ version_output.stdout }}
-      when: ansible_net_system != "nxos"
+      #when: ansible_net_system != "nxos"
 
 ...
