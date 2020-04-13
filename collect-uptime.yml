@@ -6,7 +6,7 @@
   tasks: 
     - name: Capture SHOW VERSION
       cli_command:
-        command:  show version | i ersion
+        command:  {{ my_cmd }}
       register: version_output
       when: ansible_net_system != "nxos"
 
