@@ -1,7 +1,7 @@
 ---
 
 -
-  hosts: infrastructure
+  hosts: ssh_devices
  
   tasks: 
     - name: Capture SHOW COMMAND
