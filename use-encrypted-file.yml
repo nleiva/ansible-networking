@@ -1,0 +1,23 @@
+---
+# ansible-playbook --ask-vault-pass use-encrypted-file.yml 
+
+- name: Using data from an encrypted file
+  hosts: localhost
+  connection: local
+  become: false
+  gather_facts: false
+  tasks:
+    - name: make sure we are running correct Ansible Version
+      assert:
+        that:
+          - ansible_version.major >= 2
+          - ansible_version.minor >= 9
+
+
+    - name: Check the file exists
+      stat:
+        path: "{{playbook_dir}}/data.json"
+      register: stat_result
+
+    - name: Print output
+      debug: msg="the content of the file is {{lookup('file', '{{playbook_dir}}/data.json') }}"
