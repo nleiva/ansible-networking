@@ -1,0 +1,14 @@
+---
+
+-
+  hosts: iosxr
+  gather_facts: no
+ 
+  tasks: 
+
+    - name: multiline config
+      cli_config:
+        config: |
+          ipv4 access-list TEST_ACL
+          permit 192.0.2.1
+          remark doc-ip
