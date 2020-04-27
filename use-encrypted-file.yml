@@ -6,6 +6,9 @@
   connection: local
   become: false
   gather_facts: false
+  vars:
+    the_key: "{{lookup('file', '{{playbook_dir}}/data.json') }}"
+
   tasks:
     - name: make sure we are running correct Ansible Version
       assert:
@@ -13,11 +16,19 @@
           - ansible_version.major >= 2
           - ansible_version.minor >= 9
 
-
     - name: Check the file exists
       stat:
         path: "{{playbook_dir}}/data.json"
       register: stat_result
+    - debug:
+        var: stat_result
+    - fail:
+        msg: "We need a file located at {{playbook_dir}}/data.json"
+      when:
+        - not stat_result.stat.exists
 
-    - name: Print output
+    - name: Print output from file
       debug: msg="the content of the file is {{lookup('file', '{{playbook_dir}}/data.json') }}"
+
+    - name: Print output from var
+      debug: msg="the content of the file is {{ the_key }}"
