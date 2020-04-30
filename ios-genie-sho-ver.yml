@@ -5,7 +5,7 @@
   connection: network_cli
   gather_facts: no
   roles:
-    - parse_genie
+    - clay584.parse_genie
 
   tasks:
 
