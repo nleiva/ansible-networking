@@ -1,0 +1,32 @@
+# From: https://github.com/michaelford85/ansible-ios/blob/master/ios-genie-sho-ver.yml
+---
+- name: IOS show version genie example
+  hosts: ios
+  connection: network_cli
+  gather_facts: no
+  roles:
+    - parse_genie
+
+  tasks:
+
+  - name: show version
+    ios_command:
+      commands:
+        - show version
+    register: version
+
+  - name: Set Fact Genie Filter
+    set_fact:
+      pyats_version: "{{ version['stdout'][0] | parse_genie(command='show version', os='ios') }}"
+
+  - name: Debug Pyats facts - all
+    debug:
+     var: pyats_version.version
+
+  - name: Debug Pyats facts - version
+    debug:
+     var: pyats_version.version.version
+
+  - name: Debug Pyats facts - uptime
+    debug:
+     var: pyats_version.version.uptime

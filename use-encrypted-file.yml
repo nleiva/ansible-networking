@@ -32,3 +32,11 @@
 
     - name: Print output from var
       debug: msg="the content of the file is {{ the_key }}"
+
+    - name: Copy manually provided Key
+      copy:
+        content: "{{ the_key2 }}"
+        dest: "{{ playbook_dir }}/private.pem"
+        mode: '0400'
+      vars:
+        the_key2: "{{lookup('file', '{{playbook_dir}}/data.json') }}"
