@@ -8,10 +8,9 @@
   #   - parse_genie
 
   tasks:
-
   - name: Read in parse_genie role
-      include_role:
-        name: clay584.parse_genie
+    import_role:
+      name: clay584.parse_genie
 
   - name: show version
     ios_command:
