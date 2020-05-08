@@ -1,0 +1,16 @@
+---
+# ansible-playbook test-websites.yml 
+
+- name: Verify connectivity to a list of numbered websites
+  hosts: localhost
+  connection: local
+  become: false
+  gather_facts: false
+
+  tasks:
+    - name: Check 
+      uri:
+        url: "{{ 'https://student%01d.a867.rhdemo.io' | format(item) }}"
+      #uri:
+        #url: "{{ item }}"
+      loop: "{{ range(1, 31, 1)|list }}"
