@@ -12,7 +12,7 @@
 
     - name: Get current ntp servers on device
       ios_command:
-        commands: show run | i ntp
+        commands: show run | i ntp server
       register: output
 
     - name: Print current ntp servers
