@@ -7,4 +7,4 @@
   debug:
     var: output.stdout_lines
   when:
-      - output|len gt 0
+      - output.stdout | length > 0

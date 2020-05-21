@@ -20,7 +20,7 @@
           config: no {{ item }}
         loop: "{{ output.stdout_lines[0] }}"
         when:
-          - output|len gt 0
+          - output.stdout | length > 0
           - item not in ntp_servers
           - output.stdout[0].find('ntp') != -1
 
