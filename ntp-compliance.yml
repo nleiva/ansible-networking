@@ -18,9 +18,9 @@
       - name: Compare ntp servers and remove erroroneous entries
         cli_config:
           config: no {{ item }}
-        loop: "{{ output.stdout_lines }}"
+        loop: "{{ servers }}"
         when:
-          - output.stdout | length > 0
+          - servers | length > 0
           - item not in ntp_servers
 
       - name: Ensure intended ntp servers are present

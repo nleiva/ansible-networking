@@ -3,8 +3,15 @@
     command: show run | i ntp server
   register: output
 
+- name: Remove non config lines in IOS
+  set_fact:
+    servers: "{{ output.stdout_lines | difference(dummy_list) }}"
+  vars:
+    dummy_list:
+      - "Building configuration..."
+
 - name: Print current NTP servers on IOS device
   debug:
-    var: output.stdout_lines
+    var: servers
   when:
-      - output.stdout | length > 0
+      - servers | length > 0

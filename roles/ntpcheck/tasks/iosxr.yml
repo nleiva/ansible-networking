@@ -8,16 +8,16 @@
     msg: "{{ output.stdout }}"
 
 - name: Remove non config lines in IOS XR
-  lineinfile:
-    path: "{{ output.stdout }}"
-    #line: "Building configuration..."
-    regexp: "Building configuration..."
-    state: absent
+  set_fact:
+    servers: "{{ output.stdout_lines | difference(dummy_list) }}"
+  vars:
+    dummy_list:
+      - "Building configuration..."
 
 - name: Print current NTP servers on IOS XR device
   debug:
-    var: output.stdout_lines
+    var: servers
   when:
-      - output.stdout | length > 0
+      - servers | length > 0
 
 
