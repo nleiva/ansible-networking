@@ -16,8 +16,8 @@
 
 - name: Determine configuration delta for reporting [IOS]
   set_fact:
-    missing_servers: "{{ required_servers | difference(configured_servers) | last }}"
-    unnecessary_servers: "{{ configured_servers | difference(required_servers) | last }}"
+    missing_servers: "{{ required_servers | difference(configured_servers) }}"
+    unnecessary_servers: "{{ configured_servers | difference(required_servers) }}"
 
 - name: Create list of NEW servers to configure [IOS]
   set_fact:
