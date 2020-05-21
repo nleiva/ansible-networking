@@ -1,0 +1,10 @@
+- name: Get current ntp servers on device
+  cli_command:
+    command: show run | i ntp server
+  register: output
+
+- name: Print current ntp servers
+  debug:
+    var: output.stdout_lines
+  when:
+      - output.stdout[0].find('ntp') != -1
