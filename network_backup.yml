@@ -8,15 +8,15 @@
       set_fact:
         datetime: "{{ lookup('pipe','date +%Y-%m-%d-%H-%M') }}"
 
-    - name: create /backup directory on control node
-      file:
-        path: /backup
-        state: directory
+    # - name: create /backup directory on control node
+    #   file:
+    #     path: /backup
+    #     state: directory
 
-    - name: create timestamp directory
-      file:
-        path: "/backup/{{datetime}}"
-        state: directory
+    # - name: create timestamp directory
+    #   file:
+    #     path: "/backup/{{datetime}}"
+    #     state: directory
 
 - name: retrieve router configurations
   hosts: "{{ devices }}"
@@ -28,22 +28,27 @@
         name: backup
       when: ansible_network_os is defined
 
-    - name: SAVE CONFIGURATION LOCALLY
-      vars:
-        ansible_connection: ssh
-      copy:
-        src: "{{config_output.backup_path}}"
-        dest: "/backup/{{hostvars['ansible'].datetime}}/{{inventory_hostname}}"
-      delegate_to: ansible
-      when: config_output is defined
-      become: yes
+    # - name: SAVE CONFIGURATION LOCALLY
+    #   vars:
+    #     ansible_connection: ssh
+    #   copy:
+    #     src: "{{config_output.backup_path}}"
+    #     dest: "/backup/{{hostvars['ansible'].datetime}}/{{inventory_hostname}}"
+    #   delegate_to: ansible
+    #   when: config_output is defined
+    #   become: yes
 
     - name: SAVE CONFIGURATION to S3
       aws_s3:
         bucket: mydemo.run
         src: "{{config_output.backup_path}}"
-        object: "/configs/{{hostvars['ansible'].datetime}}/{{inventory_hostname}}"
+        object: "/configs/{{hostvars['ansible'].datetime}}/{{inventory_hostname}}.txt"
         mode: put
+      when: config_output is defined
+    
+    - name: print config URL
+      debug:
+        msg: "{{inventory_hostname}} config is at http://mydemo.run/configs/{{hostvars['ansible'].datetime}}/{{inventory_hostname}}.txt"
       when: config_output is defined
 
 # - name: backup router configurations
