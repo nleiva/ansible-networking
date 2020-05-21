@@ -21,12 +21,12 @@
 
 - name: Create list of NEW servers to configure [IOS XR]
   set_fact:
-    in_servers: "{{ in_servers }} + [ '{{ item.split(' ')[:-1] }}' ]"
+    in_servers: "{{ in_servers }} + [ '{{ item.split(' ')[-1] }}' ]"
   with_items: "{{ missing_servers }}"
 
 - name: Create list of servers to remove [IOS XR]
   set_fact:
-    out_servers: "{{ out_servers }} + [ '{{ item.split(' ')[:-1] }}' ]"
+    out_servers: "{{ out_servers }} + [ '{{ item.split(' ')[-1] }}' ]"
   with_items: "{{ unnecessary_servers }}"
 
 - name: Print out fidings for reporting [IOS XR]
