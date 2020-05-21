@@ -5,14 +5,16 @@
 
 - name: Remove non config lines
   lineinfile:
-    path: "{{ output }}"
+    path: "{{ output.stdout_lines[0] }}"
     line: "Building configuration..."
     state: absent
+  when:
+    - output|len gt 0
 
 - name: Print current ntp servers
   debug:
     var: output.stdout_lines
   when:
-      - output.stdout[0].find('ntp') != -1
+    - output|len gt 0
 
 
