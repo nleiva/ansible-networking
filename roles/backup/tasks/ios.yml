@@ -4,7 +4,7 @@
     backup: yes
   register: config_output
 
-# This task removes the Current configuration... from the top of IOS routers show run
+# This task removes lines from the Current configuration... from the top of IOS routers show run
 - name: REMOVE NON CONFIG LINES - REGEXP
   lineinfile:
     path: "{{config_output.backup_path}}"
