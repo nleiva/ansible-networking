@@ -14,7 +14,7 @@
 
     - name: Print current ntp servers
       debug:
-        var: "{{ output.stdout_lines.split(' ')[2:] }}"
+        var: "{{ output.stdout_lines }}"
 
     # Adds ntp server entries in the ntp_servers variable if the variable erase is false
     - block:
