@@ -1,13 +1,18 @@
 ---
-- name: NTP compliance for Network Elements
+- name: NTP Server configuration compliance for Network Elements
   hosts: "{{ devices }}"
   connection: network_cli
   gather_facts: no
   vars:
     erase: false
+    required_servers: []
 
   tasks:
-    # Check out cases when no ntp servers are configured. IOS XR returns "Building configuration..." as well
+    - name: Read inputs and prepare configs
+      set_fact:
+        required_servers: "{{ required_servers }} + [ '{{ item }}' ]"
+      with_items: "{{ ntp_servers }}"
+
     - name: Check existing NTP Servers
       include_role:
         name: ntpcheck
@@ -15,25 +20,25 @@
 
     # Adds ntp server entries in the ntp_servers variable if the variable erase is false
     - block:
-      - name: Compare ntp servers and remove erroroneous entries
+      - name: Compare NTP servers and remove erroroneous entries
         cli_config:
           config: no {{ item }}
-        loop: "{{ servers }}"
+        loop: "{{ configured_servers }}"
         when:
-          - servers | length > 0
-          - item not in ntp_servers
+          - configured_servers | length > 0
+          - item not in required_servers
 
-      - name: Ensure intended ntp servers are present
+      - name: Ensure intended NTP servers are present
         cli_config:
           config: "{{ item }}"
-        loop: "{{ ntp_servers }}"
+        loop: "{{ required_servers }}"
       when: not erase|bool
 
-    #erases all ntp server entries if the variable erase is true
+    # Erases all ntp server entries if the variable erase is true
     - name: Remove all existing ntp server entries
       cli_config:
         config: no {{ item }}
-      loop: "{{ output.stdout_lines }}"
+      loop: "{{ configured_servers }}"
       when:
-        - output.stdout | length > 0
+        - configured_servers | length > 0
         - erase|bool

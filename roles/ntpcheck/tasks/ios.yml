@@ -5,13 +5,11 @@
 
 - name: Remove non config lines in IOS
   set_fact:
-    servers: "{{ output.stdout_lines | difference(dummy_list) }}"
+    configured_servers: "{{ output.stdout_lines | difference(dummy_list) }}"
   vars:
     dummy_list:
       - "Building configuration..."
 
 - name: Print current NTP servers on IOS device
   debug:
-    var: servers
-  when:
-      - servers | length > 0
+    var: configured_servers
