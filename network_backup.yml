@@ -44,9 +44,7 @@
         src: "{{config_output.backup_path}}"
         object: "/configs/{{hostvars['ansible'].datetime}}/{{inventory_hostname}}"
         mode: put
-      delegate_to: ansible
       when: config_output is defined
-      become: yes
 
 # - name: backup router configurations
 #   hosts: ansible
