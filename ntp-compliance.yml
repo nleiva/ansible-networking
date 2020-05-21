@@ -6,6 +6,8 @@
   vars:
     erase: false
     required_servers: []
+    in_servers: []
+    out_servers: []
 
   tasks:
     - name: Read inputs and prepare configs
