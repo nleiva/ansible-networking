@@ -1,0 +1,42 @@
+---
+- name: NTP compliance for network elements
+  hosts: "{{ devices }}"
+  connection: network_cli
+  gather_facts: no
+  vars:
+    erase: false
+
+  tasks:
+    - name: Get current ntp servers on device
+      cli_command:
+        commands: show run | i ntp server
+      register: output
+
+    - name: Print current ntp servers
+      debug:
+        var: "{{ output.stdout_lines.split(' ')[2:] }}"
+
+    # Adds ntp server entries in the ntp_servers variable if the variable erase is false
+    - block:
+      - name: Compare ntp servers and remove erroroneous entries
+        cli_config:
+          lines: no {{ item }}
+        loop: "{{ output.stdout_lines[0] }}"
+        when:
+          - item not in ntp_servers
+          - output.stdout[0].find('ntp') != -1
+
+      - name: Ensure intended ntp servers are present
+        ios_config:
+          lines: "{{ item }}"
+        loop: "{{ ntp_servers }}"
+      when: not erase|bool
+
+    #erases all ntp server entries if the variable erase is true
+    - name: Remove all existing ntp server entries
+      ios_config:
+        lines: no {{ item }}
+      loop: "{{ output.stdout_lines[0] }}"
+      when:
+        - output.stdout[0].find('ntp') != -1
+        - erase|bool
