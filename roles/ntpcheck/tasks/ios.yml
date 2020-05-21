@@ -1,15 +1,26 @@
-- name: Get current NTP servers on IOS device
+- name: Get current NTP servers [IOS]
   cli_command:
     command: show run | i ntp server
   register: output
 
-- name: Remove non config lines in IOS
+- name: Remove non config lines [IOS]
   set_fact:
     configured_servers: "{{ output.stdout_lines | difference(dummy_list) }}"
   vars:
     dummy_list:
       - "Building configuration..."
 
-- name: Print current NTP servers on IOS device
+- name: Print current NTP servers [IOS]
   debug:
     var: configured_servers
+
+- name: Determine configuration delta for reporting [IOS]
+  set_fact:
+    missing_servers: "{{ required_servers | difference(configured_servers) | last }}"
+    unnecessary_servers: "{{ configured_servers | difference(required_servers) | last }}"
+
+- name: Print out fidings for reporting [IOS]
+  debug:
+    msg:
+    - "We are missing the following NTP Servers in IOS: {{ missing_servers }}"
+    - "We will delete this NTP Servers in IOS: {{ unnecessary_servers }}"
