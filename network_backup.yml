@@ -19,7 +19,7 @@
         state: directory
 
 - name: retrieve router configurations
-  hosts: {{ devices }}
+  hosts: "{{ devices }}"
   gather_facts: no
 
   tasks:
