@@ -1,20 +1,25 @@
 ---
 - name: setup control node timestamp
-  hosts: localhost
+  hosts: ansible
   gather_facts: no
-  # become: yes
+  become: yes
   tasks:
     - name: create time stamp for play
       set_fact:
         datetime: "{{ lookup('pipe','date +%Y-%m-%d-%H-%M') }}"
 
+    - name: create /backup directory on control node
+      file:
+        path: /backup
+        state: directory
+
     - name: create timestamp directory
       file:
-        path: "/tmp/{{datetime}}"
+        path: "/backup/{{datetime}}"
         state: directory
 
 - name: retrieve router configurations
-  hosts: "{{ devices }}"
+  hosts: {{ devices }}
   gather_facts: no
 
   tasks:
@@ -28,10 +33,10 @@
         ansible_connection: ssh
       copy:
         src: "{{config_output.backup_path}}"
-        dest: "/tmp/{{hostvars['localhost'].datetime}}/{{inventory_hostname}}"
-      delegate_to: localhost
+        dest: "/backup/{{hostvars['ansible'].datetime}}/{{inventory_hostname}}"
+      delegate_to: ansible
       when: config_output is defined
-      # become: yes
+      become: yes
 
 
 # - name: backup router configurations
