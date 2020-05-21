@@ -10,7 +10,7 @@
   tasks:
     - name: Read inputs and prepare configs
       set_fact:
-        required_servers: "{{ required_servers }} + [ '{{ item }}' ]"
+        required_servers: "{{ required_servers }} + [ 'ntp server {{ item }}' ]"
       with_items: "{{ ntp_servers }}"
 
     - name: Check existing NTP Servers
