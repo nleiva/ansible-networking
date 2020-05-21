@@ -3,9 +3,13 @@
     command: show run | i ntp server
   register: output
 
+- name: DEBUG IOS XR stdout
+  debug: 
+    msg: "{{ output.stdout }}"
+
 - name: Remove non config lines in IOS XR
   lineinfile:
-    path: "{{ output.stdout_lines[0] }}"
+    path: "{{ output.stdout[0] }}"
     #line: "Building configuration..."
     regexp: "Building configuration..."
     state: absent

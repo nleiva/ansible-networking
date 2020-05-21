@@ -1,5 +1,5 @@
 ---
-- name: NTP compliance for network elements
+- name: NTP compliance for Network Elements
   hosts: "{{ devices }}"
   connection: network_cli
   gather_facts: no
@@ -22,7 +22,6 @@
         when:
           - output.stdout | length > 0
           - item not in ntp_servers
-          - output.stdout[0].find('ntp') != -1
 
       - name: Ensure intended ntp servers are present
         cli_config:
@@ -36,5 +35,5 @@
         config: no {{ item }}
       loop: "{{ output.stdout_lines[0] }}"
       when:
-        - output.stdout[0].find('ntp') != -1
+        - output.stdout | length > 0
         - erase|bool
