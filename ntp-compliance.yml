@@ -9,7 +9,7 @@
   tasks:
     - name: Get current ntp servers on device
       cli_command:
-        commands: show run | i ntp server
+        command: show run | i ntp server
       register: output
 
     - name: Print current ntp servers
@@ -20,22 +20,22 @@
     - block:
       - name: Compare ntp servers and remove erroroneous entries
         cli_config:
-          lines: no {{ item }}
+          config: no {{ item }}
         loop: "{{ output.stdout_lines[0] }}"
         when:
           - item not in ntp_servers
           - output.stdout[0].find('ntp') != -1
 
       - name: Ensure intended ntp servers are present
-        ios_config:
-          lines: "{{ item }}"
+        cli_config:
+          config: "{{ item }}"
         loop: "{{ ntp_servers }}"
       when: not erase|bool
 
     #erases all ntp server entries if the variable erase is true
     - name: Remove all existing ntp server entries
-      ios_config:
-        lines: no {{ item }}
+      cli_config:
+        config: no {{ item }}
       loop: "{{ output.stdout_lines[0] }}"
       when:
         - output.stdout[0].find('ntp') != -1
