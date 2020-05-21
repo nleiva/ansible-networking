@@ -1,6 +1,6 @@
 ---
 - name: setup control node timestamp
-  hosts: ansible
+  hosts: localhost
   gather_facts: no
   become: yes
   tasks:
@@ -29,7 +29,7 @@
       copy:
         src: "{{config_output.backup_path}}"
         dest: "/tmp/{{hostvars['ansible'].datetime}}/{{inventory_hostname}}"
-      delegate_to: ansible
+      delegate_to: localhost
       when: config_output is defined
       become: yes
 
