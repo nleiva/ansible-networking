@@ -32,5 +32,5 @@
 - name: Print out fidings for reporting [IOS]
   debug:
     msg:
-    - "We are missing the following NTP Servers in IOS: {{ in_servers }}"
-    - "We will delete these NTP Servers in IOS: {{ out_servers }}"
+    - "We are missing the following NTP Servers in IOS: {{ in_servers | list }}"
+    - "We will delete these NTP Servers in IOS: {{ out_servers | list }}"
