@@ -2,7 +2,7 @@
 - name: setup control node timestamp
   hosts: localhost
   gather_facts: no
-  become: yes
+  # become: yes
   tasks:
     - name: create time stamp for play
       set_fact:
@@ -31,7 +31,7 @@
         dest: "/tmp/{{hostvars['ansible'].datetime}}/{{inventory_hostname}}"
       delegate_to: localhost
       when: config_output is defined
-      become: yes
+      # become: yes
 
 
 # - name: backup router configurations
