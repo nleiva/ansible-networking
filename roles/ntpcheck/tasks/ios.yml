@@ -1,9 +1,9 @@
-- name: Get current ntp servers on device
+- name: Get current NTP servers on IOS device
   cli_command:
     command: show run | i ntp server
   register: output
 
-- name: Print current ntp servers
+- name: Print current NTP servers on IOS device
   debug:
     var: output.stdout_lines
   when:
