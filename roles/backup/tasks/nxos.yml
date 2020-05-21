@@ -8,9 +8,9 @@
 - name: REMOVE NON CONFIG LINES - REGEXP
   lineinfile:
     path: "{{config_output.backup_path}}"
-    line: "{{ item.line }}"
+    regexp: "{{ item.regexp }}"
     state: absent
   with_items:
-    -  { line: '!Command: show running-config' }
-    -  { line: '!Running configuration last done at:' }
-    -  { line: '!Time:' }
+    -  { regexp: '!Command: show running-config' }
+    -  { regexp: '!Running configuration last done at:' }
+    -  { regexp: '!Time:' }
