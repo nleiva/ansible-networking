@@ -1,6 +1,6 @@
 - name: Get current NTP servers on IOS XR device
   cli_command:
-    command: show run | i ntp server
+    command: show run formal | i ntp server
   register: output
 
 - name: DEBUG IOS XR stdout
@@ -9,7 +9,7 @@
 
 - name: Remove non config lines in IOS XR
   lineinfile:
-    path: "{{ output.stdout[0] }}"
+    path: "{{ output.stdout }}"
     #line: "Building configuration..."
     regexp: "Building configuration..."
     state: absent
