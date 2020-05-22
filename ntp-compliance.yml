@@ -8,8 +8,11 @@
     required_servers: []
     in_servers: []
     out_servers: []
-    missing: {}
-    to_remove: {}
+  
+  pre_tasks:
+    - set_fact:
+        missing: {}
+        to_remove: {}
 
   tasks:
     - name: Read inputs and prepare configs
