@@ -1,12 +1,4 @@
 ---
-- name: Placeholder for global variables 
-  hosts: localhost
-  tasks:   
-    - add_host:
-        name:   "GLOBAL"
-        missing: {}
-        to_remove: {}
-
 - name: NTP Server configuration compliance for Network Elements
   hosts: "{{ devices }}"
   connection: network_cli
@@ -66,6 +58,10 @@
         mode: put
         metadata: 'Content-Type=text/html'
       when: missing | length > 0
+
+      - name: DEBUG hostvars
+        debug:
+          msg: "{{ hostvars }}"
 
     # Erases all ntp server entries if the variable erase is true
     - name: Remove all existing ntp server entries

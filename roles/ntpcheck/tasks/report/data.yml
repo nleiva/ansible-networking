@@ -22,13 +22,13 @@
 
 - name: Debug PRE
   debug:
-    msg: "{{ hostvars['GLOBAL']['missing'] | to_yaml }}"
+    msg: "{{ missing | to_yaml }}"
 
 - name: Generate report variables [{{ ansible_network_os | default("unknown OS")}}]
   set_fact:
-    hostvars['GLOBAL']['missing']: "{{ hostvars['GLOBAL']['missing'] | combine( { ansible_network_os: in_servers } ) }}"
+    missing: "{{ missing] | combine( { ansible_network_os: in_servers } ) }}"
     to_remove: "{{ to_remove | combine( { ansible_network_os: out_servers } ) }}"
 
 - name: Debug POST
   debug:
-    msg: "{{ hostvars['GLOBAL']['missing'] | to_yaml }}"
+    msg: "{{ missing | to_yaml }}"
