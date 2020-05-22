@@ -14,23 +14,6 @@
   debug:
     var: configured_servers
 
-- name: Determine configuration delta for reporting [IOS]
-  set_fact:
-    missing_servers: "{{ required_servers | difference(configured_servers) }}"
-    unnecessary_servers: "{{ configured_servers | difference(required_servers) }}"
-
-- name: Create list of NEW servers to configure [IOS]
-  set_fact:
-    in_servers: "{{ in_servers }} + [ '{{ item.split(' ')[-1] }}' ]"
-  with_items: "{{ missing_servers }}"
-
-- name: Create list of servers to remove [IOS]
-  set_fact:
-    out_servers: "{{ out_servers }} + [ '{{ item.split(' ')[-1] }}' ]"
-  with_items: "{{ unnecessary_servers }}"
-
-- name: Print out fidings for reporting [IOS]
-  debug:
-    msg:
-    - "We are missing the following NTP Servers in IOS: {{ in_servers | list }}"
-    - "We will delete these NTP Servers in IOS: {{ out_servers | list }}"
+## Generate report data
+- name: Generate data for reporting
+  include_tasks: 'report/data.yml'
