@@ -14,6 +14,7 @@
       set_fact:
         required_servers: "{{ required_servers }} + [ 'ntp server {{ item }}' ]"
       with_items: "{{ ntp_servers }}"
+      no_log: True
 
     - name: Check existing NTP Servers
       include_role:
@@ -40,7 +41,7 @@
     #   set_fact:
     #     rendered_template: "{{ lookup('template', 'report.j2') }}"
 
-    - name: Save template to tempporary file
+    - name: Save template to temporary file
       template:
         src: report.j2
         dest: ./temp.html
@@ -58,7 +59,7 @@
       when: in_servers | length > 0 or out_servers | length > 0
 
     # Erases all ntp server entries if the variable erase is true
-    - name: Remove all existing ntp server entries
+    - name: Remove all existing NTP server entries
       cli_config:
         config: no {{ item }}
       loop: "{{ configured_servers }}"

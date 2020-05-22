@@ -26,7 +26,7 @@ $("document").ready(function(){
 </head>
 <body>
 <center>
-<h1>Ansible Network Automation NTP Compliance Report</h1>
+<h1>NTP Config Compliance Report</h1>
 </center>
 
 <center>
@@ -37,7 +37,8 @@ $("document").ready(function(){
     <thead>
         <tr>
             <th>Device</th>
-            <th>IP</th>
+            <th>Type</th>
+            <th>IP address</th>
         </tr>
     </thead>
     <tbody>
@@ -45,6 +46,7 @@ $("document").ready(function(){
    {% for ip in hostvars[device].in_servers %}
         <tr>
             <td>{{ hostvars[device].ansible_host }}</td>
+            <td>{{ device | replace('-SSH', '') }}</td>
             <td>{{ ip }}</td>
         </tr>
    {% endfor %}
@@ -60,7 +62,8 @@ $("document").ready(function(){
     <thead>
         <tr>
             <th>Device</th>
-            <th>IP</th>
+            <th>Type</th>
+            <th>IP address</th>
         </tr>
     </thead>
     <tbody>
@@ -68,6 +71,7 @@ $("document").ready(function(){
    {% for ip in hostvars[device].out_servers %}
         <tr>
             <td>{{ hostvars[device].ansible_host }}</td>
+            <td>{{ device | replace('-SSH', '') }}</td>
             <td>{{ ip }}</td>
         </tr>
    {% endfor %}
