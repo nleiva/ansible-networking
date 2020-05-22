@@ -6,7 +6,7 @@
 - name: Remove use-vrf default [NX-OS]
   set_fact:
     configured_servers: "{{ configured_servers }} + [ '{{ item | replace(' use-vrf default', '') }}' ]"
-  with_items: "{{ stdout_lines }}"
+  with_items: "{{ output.stdout_lines }}"
   vars:
     configured_servers: []
 
