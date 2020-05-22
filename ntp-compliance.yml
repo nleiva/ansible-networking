@@ -38,15 +38,26 @@
         loop: "{{ required_servers }}"
       when: not erase|bool
 
+    # - name: Render template
+    #   set_fact:
+    #     rendered_template: "{{ lookup('template', 'report.j2') }}"
+
+    - name: Save template to tempporary file
+      template:
+        src: report.j2
+        dest: ./temp.html
+        mode: '0755'
+      when: missing | length > 0 or to_remove | length > 0
+    
     # Creates and uploads a report to S3 
     - name: Upload report to S3
       aws_s3:
         bucket: mydemo.run
-        src: "{{ lookup('template', 'report.j2') }}"
+        src: "./temp.html"
         object: "index.html"
         mode: put
         metadata: 'Content-Type=text/html'
-      when: devices | length > 0
+      when: missing | length > 0
 
     # Erases all ntp server entries if the variable erase is true
     - name: Remove all existing ntp server entries
