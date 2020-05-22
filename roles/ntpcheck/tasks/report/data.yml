@@ -19,16 +19,3 @@
     msg:
     - "We are missing the following NTP Servers in {{ ansible_network_os | upper }}: {{ in_servers | list }}"
     - "We will delete these NTP Servers in {{ ansible_network_os | upper }}: {{ out_servers | list }}"
-
-- name: Debug PRE
-  debug:
-    msg: "{{ missing | to_yaml }}"
-
-- name: Generate report variables [{{ ansible_network_os | default("unknown OS")}}]
-  set_fact:
-    missing: "{{ missing | combine( { ansible_network_os: in_servers } ) }}"
-    to_remove: "{{ to_remove | combine( { ansible_network_os: out_servers } ) }}"
-
-- name: Debug POST
-  debug:
-    msg: "{{ missing | to_yaml }}"

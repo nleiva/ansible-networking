@@ -41,10 +41,10 @@ $("document").ready(function(){
         </tr>
     </thead>
     <tbody>
-{% for name, iplist in missing.items() %}
-   {% for ip in iplist %}
+{% for device in groups['ssh_devices']|sort %}
+   {% for ip in hostvars[device].in_servers %}
         <tr>
-            <td>{{ name }}</td>
+            <td>{{ hostvars[device].ansible_host }}</td>
             <td>{{ ip }}</td>
         </tr>
    {% endfor %}
@@ -64,10 +64,10 @@ $("document").ready(function(){
         </tr>
     </thead>
     <tbody>
-{% for name, iplist in to_remove.items() %}
-   {% for ip in iplist %}
+{% for device in groups['ssh_devices']|sort %}
+   {% for ip in hostvars[device].out_servers %}
         <tr>
-            <td>{{ name }}</td>
+            <td>{{ hostvars[device].ansible_host }}</td>
             <td>{{ ip }}</td>
         </tr>
    {% endfor %}
