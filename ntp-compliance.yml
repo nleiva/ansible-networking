@@ -1,4 +1,13 @@
 ---
+- name: Placeholder for global variables 
+  hosts: localhost
+  vars:
+    missing: {}
+    to_remove: {}
+  tasks:   
+    - debug: 
+        msg: "Globar variables setup"
+
 - name: NTP Server configuration compliance for Network Elements
   hosts: "{{ devices }}"
   connection: network_cli
@@ -8,11 +17,8 @@
     required_servers: []
     in_servers: []
     out_servers: []
-  
-  pre_tasks:
-    - set_fact:
-        missing: {}
-        to_remove: {}
+    missing: {}
+    to_remove: {}
 
   tasks:
     - name: Read inputs and prepare configs
