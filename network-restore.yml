@@ -1,0 +1,13 @@
+---
+- name: restore router configurations
+  hosts: routers
+  gather_facts: no
+
+  tasks:
+    - name: Do nothing for now
+      debug:
+        msg: "Coming soon"
+
+    # - name: load restore role
+    #   include_role:
+    #     name: restore
