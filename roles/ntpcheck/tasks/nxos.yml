@@ -1,14 +1,14 @@
 - name: Get current NTP servers [NX-OS]
   cli_command:
-    command: show run | i ntp server
+    command: show run | i 'ntp server'
   register: output
 
-- name: Remove non config lines [NX-OS]
+- name: Remove use-vrf default [NX-OS]
   set_fact:
-    configured_servers: "{{ output.stdout_lines | difference(dummy_list) }}"
+    configured_servers: "{{ configured_servers }} + [ '{{ item | replace(' use-vrf default', '') }}' ]"
+  with_items: "{{ stdout_lines }}"
   vars:
-    dummy_list:
-      - "Building configuration..."
+    configured_servers: []
 
 - name: Print current NTP servers [NX-OS]
   debug:
