@@ -45,7 +45,7 @@
         src: report.j2
         dest: ./temp.html
         mode: '0755'
-      when: missing | length > 0 or to_remove | length > 0
+      when: in_servers | length > 0 or out_servers | length > 0
     
     # Creates and uploads a report to S3 
     - name: Upload report to S3
@@ -55,7 +55,7 @@
         object: "index.html"
         mode: put
         metadata: 'Content-Type=text/html'
-      when: missing | length > 0
+      when: in_servers | length > 0 or out_servers | length > 0
 
     # Erases all ntp server entries if the variable erase is true
     - name: Remove all existing ntp server entries
