@@ -1,12 +1,11 @@
 ---
 - name: Placeholder for global variables 
   hosts: localhost
-  vars:
-    missing: {}
-    to_remove: {}
   tasks:   
-    - debug: 
-        msg: "Globar variables setup"
+    - add_host:
+        name:   "GLOBAL"
+        missing: {}
+        to_remove: {}
 
 - name: NTP Server configuration compliance for Network Elements
   hosts: "{{ devices }}"
