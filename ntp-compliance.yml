@@ -43,7 +43,7 @@
       aws_s3:
         bucket: mydemo.run
         src: "{{ lookup('template', 'report.j2') }}"
-        object: "/index.html"
+        object: "index.html"
         mode: put
         metadata: 'Content-Type=text/html'
       when: devices | length > 0
