@@ -1,9 +1,9 @@
-- name: ENSURE NETCONF IS RUNNING
+- name: ENSURE NETCONF IS RUNNING [{{ ansible_network_os | default("unknown OS")}}]
   vars:
     ansible_connection: network_cli
   junos_netconf:
 
-- name: BACKUP THE CONFIG
+- name: BACKUP THE CONFIG [{{ ansible_network_os | default("unknown OS")}}]
   vars:
     ansible_connection: netconf
   junos_config:
