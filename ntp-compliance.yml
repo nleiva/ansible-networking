@@ -57,10 +57,6 @@
         metadata: 'Content-Type=text/html'
       when: missing | length > 0
 
-    - name: DEBUG hostvars
-      debug:
-        msg: "{{ hostvars }}"
-
     # Erases all ntp server entries if the variable erase is true
     - name: Remove all existing ntp server entries
       cli_config:
