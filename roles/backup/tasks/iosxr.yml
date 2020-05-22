@@ -1,0 +1,12 @@
+# This task will backup the configuration
+- name: BACKUP THE CONFIG
+  iosxr_config:
+    backup: yes
+  register: config_output
+
+# This task removes lines from the Current configuration... from the top of IOS XR routers show run
+- name: REMOVE NON CONFIG LINES - REGEXP
+  lineinfile:
+    path: "{{config_output.backup_path}}"
+    line: "Building configuration..."
+    state: absent
