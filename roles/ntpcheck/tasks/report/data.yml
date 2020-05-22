@@ -17,5 +17,5 @@
 - name: Print out fidings for reporting [{{ ansible_network_os | default("unknown OS")}}]
   debug:
     msg:
-    - "We are missing the following NTP Servers in {{ ansible_network_os | capitalize }}: {{ in_servers | list }}"
-    - "We will delete these NTP Servers in {{ ansible_network_os | capitalize }}: {{ out_servers | list }}"
+    - "We are missing the following NTP Servers in {{ ansible_network_os | upper }}: {{ in_servers | list }}"
+    - "We will delete these NTP Servers in {{ ansible_network_os | upper }}: {{ out_servers | list }}"
