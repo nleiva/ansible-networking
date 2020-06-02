@@ -1,4 +1,4 @@
-# Collecting the output of a given command
+# Parse IOS XE ACL's
 
 ## Pre-requisites
 
@@ -28,19 +28,19 @@ Latest version -> [ios-genie-show-acl](ios-genie-show-acl.yml). The following ou
   gather_facts: "{{ my_facts }}"
  
   tasks: 
-    - name: SHOW ACL's
-      ios_command:
-        commands:
-          - show ip access-lists
-      register: acls
+  - name: SHOW ACL's
+    ios_command:
+      commands:
+        - show ip access-lists
+    register: acls
 
-    - name: PARSE with GENIE
-      set_fact:
-        pyats_acls: "{{ acls['stdout'][0] | parse_genie(command='show ip access-lists', os='iosxe') }}"
+  - name: PARSE with GENIE
+    set_fact:
+      pyats_acls: "{{ acls['stdout'][0] | parse_genie(command='show ip access-lists', os='iosxe') }}"
 
-    - name: PRINT OUT
-      debug:
-      var: pyats_acls
+  - name: PRINT OUT
+    debug:
+     var: pyats_acls
 ```
 
 ## Output

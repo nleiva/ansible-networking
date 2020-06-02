@@ -7,7 +7,6 @@
     - clay584.parse_genie
 
   tasks:
-
   - name: SHOW ACL's
     ios_command:
       commands:

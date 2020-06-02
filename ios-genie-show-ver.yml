@@ -1,14 +1,13 @@
 # From: https://github.com/michaelford85/ansible-ios/blob/master/ios-genie-sho-ver.yml
 ---
 - name: IOS show version genie example
-  hosts: ios
+  hosts: "{{ my_devices }}"
+  gather_facts: "{{ my_facts }}"
   connection: network_cli
-  gather_facts: no
   roles:
     - clay584.parse_genie
 
   tasks:
-
   - name: show version
     ios_command:
       commands:
