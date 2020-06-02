@@ -1,0 +1,33 @@
+---
+- name: IOS-XE Parse ACL's
+  hosts: "{{ my_devices }}"
+  gather_facts: "{{ my_facts }}"
+  connection: network_cli
+  roles:
+    - clay584.parse_genie
+
+  tasks:
+
+  - name: SHOW ACL's
+    ios_command:
+      commands:
+        - show ip access-lists
+    register: acls
+
+  - name: PARSE with GENIE
+    set_fact:
+      pyats_acls: "{{ acls['stdout'][0] | parse_genie(command='show ip access-lists', os='iosxe') }}"
+
+  - name: PRINT OUT
+    debug:
+     var: pyats_acls
+
+
+
+# ip access-list extended TEST
+#  permit tcp any any eq www
+#  permit tcp any any eq 443
+#  permit tcp any host 8.8.8.8 eq domain
+#  permit udp any host 8.8.8.8 eq domain
+#  permit tcp 192.0.2.0 0.0.0.255 any
+# !
