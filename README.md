@@ -3,4 +3,4 @@
 ## Examples
 
 - [Collect a command output](collect-command.md)
-- [Parse IOS XE ACL's](ios-genie-show-acl.yml)
+- [Parse IOS XE ACL's](ios-genie-show-acl.md)
