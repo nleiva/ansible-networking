@@ -14,7 +14,6 @@
       set_fact:
         required_servers: "{{ required_servers }} + [ 'ntp server {{ item }}' ]"
       with_items: "{{ my_ntp_servers }}"
-      no_log: True
 
     - name: Check existing NTP Servers
       include_role:

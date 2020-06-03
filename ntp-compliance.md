@@ -19,7 +19,7 @@ You need AWS credentials to create a Compliance report on S3. You need to export
 
 ## Playbook
 
-Latest version -> [ios-genie-show-ver](ios-genie-show-ver.yml). The following output might be outdated.
+Latest version -> [ios-genie-show-ver][1]. The following output might be outdated.
 
 ```yaml
   hosts: "{{ my_devices }}"
@@ -192,3 +192,10 @@ sbx-iosxr-mgmt.cisco.com   : ok=14   changed=4    unreachable=0    failed=0    s
 
 ```
 
+The report:
+
+![NTP report][2]
+
+
+[1]: ios-genie-show-ver.yml
+[2]: files/pictures/ntp-report.png
