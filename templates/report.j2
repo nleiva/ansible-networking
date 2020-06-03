@@ -42,10 +42,10 @@ $("document").ready(function(){
         </tr>
     </thead>
     <tbody>
-{% for device in groups['ssh_devices']|sort %}
+{% for device in ansible_play_hosts_all|sort %}
    {% for ip in hostvars[device].in_servers %}
         <tr>
-            <td>{{ hostvars[device].ansible_host }}</td>
+            <td>{{ hostvars[device].inventory_hostname }}</td>
             <td>{{ device | replace('-SSH', '') }}</td>
             <td>{{ ip }}</td>
         </tr>
@@ -67,10 +67,10 @@ $("document").ready(function(){
         </tr>
     </thead>
     <tbody>
-{% for device in groups['ssh_devices']|sort %}
+{% for device in ansible_play_hosts_all|sort %}
    {% for ip in hostvars[device].out_servers %}
         <tr>
-            <td>{{ hostvars[device].ansible_host }}</td>
+            <td>{{ hostvars[device].inventory_hostname }}</td>
             <td>{{ device | replace('-SSH', '') }}</td>
             <td>{{ ip }}</td>
         </tr>

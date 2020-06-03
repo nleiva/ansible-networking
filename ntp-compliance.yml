@@ -1,8 +1,8 @@
 ---
 - name: NTP Server configuration compliance for Network Elements
-  hosts: "{{ devices }}"
+  hosts: "{{ my_devices }}"
   connection: network_cli
-  gather_facts: no
+  gather_facts: "{{ my_facts }}"
   vars:
     erase: false
     required_servers: []
@@ -13,7 +13,7 @@
     - name: Read inputs and prepare configs
       set_fact:
         required_servers: "{{ required_servers }} + [ 'ntp server {{ item }}' ]"
-      with_items: "{{ ntp_servers }}"
+      with_items: "{{ my_ntp_servers }}"
       no_log: True
 
     - name: Check existing NTP Servers
@@ -21,9 +21,9 @@
         name: ntpcheck
       when: ansible_network_os is defined
 
-    # Adds ntp server entries in the ntp_servers variable if the variable erase is false
+    # Adds NTP server entries in the my_ntp_servers variable if the variable erase is false
     - block:
-      - name: Compare NTP servers and remove erroroneous entries
+      - name: Compare NTP servers and remove erroneous entries
         cli_config:
           config: no {{ item }}
         loop: "{{ configured_servers }}"
@@ -51,7 +51,7 @@
     # Creates and uploads a report to S3 
     - name: Upload report to S3
       aws_s3:
-        bucket: mydemo.run
+        bucket: "{{ my_bucket }}"
         src: "./temp.html"
         object: "index.html"
         mode: put
