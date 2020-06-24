@@ -1,0 +1,14 @@
+---
+- name: Test DNS
+  hosts: localhost
+  connection: local
+  become: false
+  gather_facts: false
+
+  tasks:
+  - name: Test 1
+    debug: msg="{{ lookup('dig', 'www.redhat.com')}}"
+
+  - name: Debug hostvars
+    debug:
+      var: groups

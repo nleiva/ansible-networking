@@ -1,1 +1,5 @@
-- src: clay584.parse_genie
+---
+roles:
+  # Install a role from Ansible Galaxy.
+  - name: clay584.parse_genie
+    source: https://galaxy.ansible.com
