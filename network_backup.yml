@@ -32,7 +32,7 @@
     #   vars:
     #     ansible_connection: ssh
     #   copy:
-    #     src: "{{config_output.backup_path}}"
+    #     src: "{{ config_output.backup_path }}"
     #     dest: "/backup/{{hostvars['ansible'].datetime}}/{{inventory_hostname}}"
     #   delegate_to: ansible
     #   when: config_output is defined
@@ -41,15 +41,15 @@
     - name: SAVE CONFIGURATION to S3
       aws_s3:
         bucket: mydemo.run
-        src: "{{config_output.backup_path}}"
-        object: "/configs/{{hostvars['ansible'].datetime}}/{{inventory_hostname}}.txt"
+        src: "{{ config_output.backup_path }}"
+        object: "/configs/{{ hostvars['ansible'].datetime }}/{{ inventory_hostname }}.txt"
         mode: put
         metadata: 'Content-Type=text/plain'
       when: config_output is defined
-    
+
     - name: print config URL
       debug:
-        msg: "{{inventory_hostname}} config is at http://mydemo.run/configs/{{hostvars['ansible'].datetime}}/{{inventory_hostname}}.txt"
+        msg: "{{ inventory_hostname }} config is at http://mydemo.run/configs/{{ hostvars['ansible'].datetime }}/{{ inventory_hostname }}.txt"
       when: config_output is defined
 
 # - name: backup router configurations

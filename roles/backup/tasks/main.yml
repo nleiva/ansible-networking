@@ -1,2 +1,2 @@
-- name: backup network device config [{{ ansible_network_os | default("unknown OS")}}]
+- name: backup network device config [{{ ansible_network_os | default("unknown OS") }}]
   include_tasks: "{{ ansible_network_os }}.yml"

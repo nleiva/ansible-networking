@@ -1,3 +1,4 @@
 ---
-- name: clay584.parse_genie
-  source: https://galaxy.ansible.com
+# Install a role from GitHub
+- src: https://github.com/clay584/parse_genie
+  name: parse_genie

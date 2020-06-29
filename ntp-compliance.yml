@@ -46,7 +46,7 @@
         dest: ./temp.html
         mode: '0755'
       when: in_servers | length > 0 or out_servers | length > 0
-    
+
     # Creates and uploads a report to S3 
     - name: Upload report to S3
       aws_s3:

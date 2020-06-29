@@ -1,13 +1,13 @@
 # This task will backup the configuration
-- name: BACKUP THE CONFIG [{{ ansible_network_os | default("unknown OS")}}]
+- name: BACKUP THE CONFIG [{{ ansible_network_os | default("unknown OS") }}]
   nxos_config:
     backup: yes
   register: config_output
 
 # This task removes lines from the Current configuration... from the top of NX-OS device show run
-- name: REMOVE NON CONFIG LINES - REGEXP [{{ ansible_network_os | default("unknown OS")}}]
+- name: REMOVE NON CONFIG LINES - REGEXP [{{ ansible_network_os | default("unknown OS") }}]
   lineinfile:
-    path: "{{config_output.backup_path}}"
+    path: "{{ config_output.backup_path }}"
     regexp: "{{ item.regexp }}"
     state: absent
   with_items:

@@ -3,8 +3,8 @@
 -
   hosts: "{{ my_devices }}"
   gather_facts: "{{ my_facts }}"
- 
-  tasks: 
+
+  tasks:
     - name: Capture SHOW COMMAND
       cli_command:
         command:  "{{ my_cmd }}"

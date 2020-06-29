@@ -3,8 +3,8 @@
 -
   hosts: iosxr
   gather_facts: no
- 
-  tasks: 
+
+  tasks:
 
     - name: multiline config
       cli_config:

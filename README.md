@@ -1,4 +1,6 @@
-# My collection of Playbooks
+# Networking collection of Playbooks
+
+![Ansible Lint](https://github.com/nleiva/ansible-networking/workflows/Ansible%20Lint/badge.svg)
 
 ## Inventory
 

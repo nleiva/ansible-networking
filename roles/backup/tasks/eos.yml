@@ -1,4 +1,4 @@
-- name: BACKUP THE CONFIG [{{ ansible_network_os | default("unknown OS")}}]
+- name: BACKUP THE CONFIG [{{ ansible_network_os | default("unknown OS") }}]
   eos_config:
     backup: yes
   register: config_output

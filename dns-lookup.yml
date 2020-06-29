@@ -7,7 +7,7 @@
 
   tasks:
   - name: Test 1
-    debug: msg="{{ lookup('dig', 'www.redhat.com')}}"
+    debug: msg="{{ lookup('dig', 'www.redhat.com') }}"
 
   - name: Debug hostvars
     debug:
