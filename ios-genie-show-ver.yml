@@ -5,7 +5,7 @@
   gather_facts: "{{ my_facts }}"
   connection: network_cli
   roles:
-    - clay584.parse_genie
+    - parse_genie
 
   tasks:
   - name: show version
