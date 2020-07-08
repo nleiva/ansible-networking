@@ -11,7 +11,7 @@
           ios_config:
             backup: yes
           register: config_output
-          
+
         - name: Print debug message [{{ ansible_network_os | default("unknown OS") }}]
           debug:
             msg: "Backup generated {{ config_output.date }} at {{ config_output.time }}"

@@ -12,4 +12,4 @@ I'm using the following inventory fo the examples output: [ansible-inventory](ht
 - [NTP Compliance](ntp-compliance.md)
 - [Parse IOS XE ACL's](ios-genie-show-acl.md)
 - [Parse IOS XE SW Version](ios-genie-show-ver.md)
-- [Show config differences](show-diff.yml)
+- [Show config differences](show-diff.md)
