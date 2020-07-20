@@ -6,10 +6,11 @@
 - `my_facts`: Whether to collect facts per device: `yes` or `no`.
 - `my_config`: Config to apply. Ex: 
 
-```
-ip access-list standard TEST_ACL
- permit 192.0.2.1
- remark doc-ip
+```yaml
+my_config: |
+  ip access-list standard TEST_ACL
+  permit 192.0.2.1
+  remark doc-ip
 ```
 
 ## Playbook
