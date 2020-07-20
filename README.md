@@ -13,3 +13,4 @@ I'm using the following inventory fo the examples output: [ansible-inventory](ht
 - [Parse IOS XE ACL's](ios-genie-show-acl.md)
 - [Parse IOS XE SW Version](ios-genie-show-ver.md)
 - [Show config differences](show-diff.md)
+- [Multi-line Config](multi-line-config.md)

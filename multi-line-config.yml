@@ -1,14 +1,14 @@
 ---
 
 -
-  hosts: iosxr
-  gather_facts: no
+  hosts: "{{ my_devices }}"
+  gather_facts: "{{ my_facts }}"
 
   tasks:
-
-    - name: multiline config
+    - name: multi-line config
       cli_config:
-        config: |
-          ipv4 access-list TEST_ACL
-          permit 192.0.2.1
-          remark doc-ip
+        config: "{{ my_config }}"
+        # config: |
+        #   ipv4 access-list TEST_ACL
+        #   permit 192.0.2.1
+        #   remark doc-ip

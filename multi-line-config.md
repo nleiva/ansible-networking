@@ -1,10 +1,16 @@
-# Collecting the output of a given command
+# Multi-line Config
 
 ## Variables required
 
 - `my_devices`: One or more groups or host patterns, separated by colons. 
 - `my_facts`: Whether to collect facts per device: `yes` or `no`.
-- `my_cmd`: Command to issue. Ex: `show version | i ersion`
+- `my_config`: Config to apply. Ex: 
+
+```
+ip access-list standard TEST_ACL
+ permit 192.0.2.1
+ remark doc-ip
+```
 
 ## Playbook
 
@@ -13,16 +19,11 @@ Latest version -> [collect-command](collect-command.yml). The following output m
 ```yaml
   hosts: "{{ my_devices }}"
   gather_facts: "{{ my_facts }}"
- 
-  tasks: 
-    - name: Capture SHOW COMMAND
-      cli_command:
-        command:  "{{ my_cmd }}"
-      register: cmd_output
 
-    - name: Display OUTPUT
-      debug:
-        msg: Output is {{ cmd_output.stdout }}
+  tasks:
+    - name: multiline config
+      cli_config:
+        config: "{{ my_config }}"
 ```
 
 ## Output
