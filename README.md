@@ -2,9 +2,12 @@
 
 ![Ansible Lint](https://github.com/nleiva/ansible-networking/workflows/Ansible%20Lint/badge.svg)
 
+This is my personal collection of Ansible Networking examples. Of course, most these are recycled from other repositories.
+
+
 ## Inventory
 
-I'm using the following inventory fo the examples output: [ansible-inventory](https://github.com/nleiva/ansible-inventory/blob/master/hosts). These are [DevNet always-on](https://developer.cisco.com/docs/sandbox/#!networking/networking-overview) devices.
+I'm using this [ansible-inventory](https://github.com/nleiva/ansible-inventory/blob/master/hosts) to provide output examples ([DevNet always-on](https://developer.cisco.com/docs/sandbox/#!networking/networking-overview) devices).
 
 ## Examples
 
