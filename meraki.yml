@@ -1,0 +1,182 @@
+---
+# https://github.com/CiscoDevNet/ansible-meraki
+# ansible-galaxy collection install cisco.meraki
+# ansible-playbook meraki.yml
+
+- name: Meraki Test
+  hosts: localhost
+  gather_facts: no
+  #debugger: on_failed
+  collections:
+    - cisco.meraki
+
+  tasks:
+    - name: Query information about all organizations associated to the API user
+      meraki_organization:
+        auth_key: "{{ api_key }}"
+        state: query
+      delegate_to: localhost
+      register: orgs
+
+    - debug:
+        var: orgs.data[2]
+
+    - name: Query all devices in organization {{ org_name }}
+      meraki_device:
+        auth_key: "{{ api_key }}"
+        org_name: "{{ org_name }}"
+        state: query
+      register: devices
+
+    - debug:
+        var: devices.data[16]
+
+    # - name: Query management information
+    #   meraki_management_interface:
+    #     auth_key: "{{ api_key }}"
+    #     org_name: "{{ org_name }}"
+    #     state: query
+    #     net_id: "{{ devices.data[16].network_id }}"
+    #     serial: "{{ devices.data[16].serial }}"
+    #   register: mgmt
+
+    # - debug:
+    #     var: mgmt
+
+    # - name: Create a new organization named {{ org_name }}
+    #   meraki_organization:
+    #     auth_key: "{{ api_key }}"
+    #     org_name: "{{ org_name }}"
+    #     state: present
+    #   delegate_to: localhost
+
+    - name: Query information about all administrators associated to the organization {{ org_name }}
+      meraki_admin:
+        auth_key: "{{ api_key }}"
+        org_name: "{{ org_name }}"
+        state: query
+      register: admins
+
+    - debug:
+        msg: " {{ admins.data[3].name }} at {{ admins.data[3].email }} has API Key -> {{ admins.data[3].has_api_key }}"
+
+    - name: Query SNMP settings in the {{ org_name }} organization
+      meraki_snmp:
+        auth_key: "{{ api_key }}"
+        org_name: "{{ org_name }}"
+        state: query
+      register: snmp
+
+    - debug:
+        var: snmp
+
+    - name: List all networks associated to the {{ org_name }} organization
+      meraki_network:
+        auth_key: "{{ api_key }}"
+        org_name: "{{ org_name }}"
+        state: query
+      register: nets
+
+    # - debug:
+    #     var: nets
+
+    - name: Query network named {{ nets.data[0].name }} in the {{ org_name }} organization
+      meraki_network:
+        auth_key: "{{ api_key }}"
+        org_name: "{{ org_name }}"
+        net_name: "{{ nets.data[0].name }}"
+        state: query
+      register: net
+
+    # - debug:
+    #     var: net
+
+    - name: Query syslog configurations on network named {{ nets.data[0].name }} in the {{ org_name }} organization
+      meraki_syslog:
+        auth_key: "{{ api_key }}"
+        org_name: "{{ org_name }}"
+        net_name: "{{ nets.data[0].name }}"
+        state: query
+      register: syslog
+
+    - debug:
+        var: syslog
+
+    # - name: Enable VLANs on network {{ nets.data[0].name }}
+    #   meraki_network:
+    #     auth_key: "{{ api_key }}"
+    #     org_name: "{{ org_name }}"
+    #     net_name: "{{ nets.data[0].name }}"
+    #     state: query
+    #     enable_vlans: yes
+
+    # - name: Query all VLANs on network {{ nets.data[0].name }}
+    #   meraki_vlan:
+    #     auth_key: "{{ api_key }}"
+    #     org_name: "{{ org_name }}"
+    #     net_name: "{{ nets.data[0].name }}"
+    #     state: query
+    #   register: vlans
+
+    # - debug:
+    #     var: vlans
+
+    - name: List SSID(s) on network {{ nets.data[0].name }}
+      meraki_ssid:
+        auth_key: "{{ api_key }}"
+        org_name: "{{ org_name }}"
+        net_name: "{{ nets.data[0].name }}"
+        state: query
+      register: ssids
+
+    - debug:
+        var: ssids.data[0]
+
+    # - name: Enable click-through splash page on {{ ssids.data[0].name }}
+    #   meraki_ssid:
+    #     auth_key: "{{ api_key }}"
+    #     org_name: "{{ org_name }}"
+    #     net_name: "{{ nets.data[0].name }}"
+    #     state: present
+    #     name: "{{ ssids.data[0].name }}"
+    #     splash_page: Click-through splash page
+
+
+    # "orgs": {
+    #     "changed": false,
+    #     "data": [
+    #         {
+    #             "id": "681155",
+    #             "name": "DeLab",
+    #             "url": "https://n6.meraki.com/o/49Gm_c/manage/organization/overview"
+    #         },
+    #         {
+    #             "id": "566327653141842188",
+    #             "name": "DevNetAssoc",
+    #             "url": "https://n6.meraki.com/o/dcGsWag/manage/organization/overview"
+    #         },
+    #         {
+    #             "id": "549236",
+    #             "name": "DevNet Sandbox",
+    #             "url": "https://n149.meraki.com/o/-t35Mb/manage/organization/overview"
+    #         },
+    #         {
+    #             "id": "52636",
+    #             "name": "Forest City - Other",
+    #             "url": "https://n42.meraki.com/o/E_utnd/manage/organization/overview"
+    #         },
+    #         {
+    #             "id": "865776",
+    #             "name": "Cisco Live US 2019",
+    #             "url": "https://n22.meraki.com/o/CVQqTb/manage/organization/overview"
+    #         },
+    #         {
+    #             "id": "463308",
+    #             "name": "DevNet San Jose",
+    #             "url": "https://n18.meraki.com/o/vB2D8a/manage/organization/overview"
+    #         }
+    #     ],
+    #     "failed": false,
+    #     "response": "OK (unknown bytes)",
+    #     "status": 200
+    # }

@@ -1,0 +1,5 @@
+---
+collections:
+  # Install a collection from Ansible Galaxy.
+  - name: cisco.meraki
+    source: https://galaxy.ansible.com
