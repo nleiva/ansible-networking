@@ -18,7 +18,7 @@
     debug:
       var: ec2_tag_Contact
 
-  - name: Debug my variable from vars
+  - name: "Debug my variable from vars"
     debug:
       var: my_test1
 
