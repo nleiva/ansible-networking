@@ -20,11 +20,11 @@
 
   - name: "Print from variables"
     debug:
-      var: my_test1
+      msg: "{{ my_test1 }}"
 
   - name: "Print from inventory"
     debug:
-      var: my_test2
+      msg: "{{ my_test2 }}"
 
   - name: End message
     debug:
