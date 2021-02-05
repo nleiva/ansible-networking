@@ -26,3 +26,6 @@
     debug:
       var: my_test2
 
+  - name: End message
+    debug:
+      msg: "All good"
