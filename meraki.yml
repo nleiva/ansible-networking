@@ -1,5 +1,6 @@
 ---
 # https://github.com/CiscoDevNet/ansible-meraki
+# https://galaxy.ansible.com/cisco/meraki
 # ansible-galaxy collection install cisco.meraki
 # ansible-playbook meraki.yml
 

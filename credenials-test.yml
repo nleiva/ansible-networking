@@ -1,0 +1,16 @@
+---
+- name: Test hostvars access from credentials
+  hosts: all
+  gather_facts: true
+  vars:
+    - my_test: "{{ ec2_tag_Contact | default('It didn't work') }}"
+
+  tasks:
+  - name: Debug hostvars
+    debug:
+      var: groups
+
+  - name: Debug my variable
+    debug:
+      var: my_test
+
