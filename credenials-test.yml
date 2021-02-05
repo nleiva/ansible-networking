@@ -14,15 +14,15 @@
     debug:
       var: groups
 
-  - name: Debug ec2_tag_Contact
+  - name: "Debug ec2_tag_Contact"
     debug:
       var: ec2_tag_Contact
 
-  - name: "Debug my variable from vars"
+  - name: "Debug my variable from varssss"
     debug:
       var: my_test1
 
-  - name: Debug my variable from inventory
+  - name: "Debug my variable from inventory"
     debug:
       var: my_test2
 
