@@ -6,23 +6,23 @@
     my_test1: "{{ ec2_tag_Contact | default('It did NOT work', true) }}"
 
   tasks:
-  - name: Debug hostvars
-    debug:
-      var: hostvars
+  # - name: Debug hostvars
+  #   debug:
+  #     var: hostvars
 
-  - name: Debug groups
-    debug:
-      var: groups
+  # - name: Debug groups
+  #   debug:
+  #     var: groups
 
-  - name: "Debug ec2_tag_Contact"
+  - name: "Print from tags"
     debug:
       var: ec2_tag_Contact
 
-  - name: "Debug my variable from varssss"
+  - name: "Print from variables"
     debug:
       var: my_test1
 
-  - name: "Debug my variable from inventory"
+  - name: "Print from inventory"
     debug:
       var: my_test2
 
