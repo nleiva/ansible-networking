@@ -14,18 +14,18 @@
   #   debug:
   #     var: groups
 
-  - name: "Print from tags"
+  - name: Print from tags
     debug:
-      var: ec2_tag_Contact
+      msg: "{{ ec2_tag_Contact }}"
 
-  - name: "Print from variables"
+  - name: Print from variables
     debug:
       msg: "{{ my_test1 }}"
 
-  - name: "Print from inventory"
+  - name: Print from inventory
     debug:
       msg: "{{ my_test2 }}"
 
   - name: End message
     debug:
-      msg: "All good"
+      msg: "All good, looks like debug: var: has an issue"
