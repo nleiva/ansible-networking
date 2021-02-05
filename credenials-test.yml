@@ -3,7 +3,7 @@
   hosts: all
   gather_facts: true
   vars:
-    my_test: "{{ ec2_tag_Contact | default('It did NOT work', true) }}"
+    my_test1: "{{ ec2_tag_Contact | default('It did NOT work', true) }}"
 
   tasks:
   - name: Debug hostvars
@@ -18,7 +18,11 @@
     debug:
       var: ec2_tag_Contact
 
-  - name: Debug my variable
+  - name: Debug my variable from vars
     debug:
-      var: my_test
+      var: my_test1
+
+  - name: Debug my variable from inventory
+    debug:
+      var: my_test2
 
