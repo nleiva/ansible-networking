@@ -3,12 +3,20 @@
   hosts: all
   gather_facts: true
   vars:
-    - my_test: "{{ ec2_tag_Contact | default('It didn't work') }}"
+    - my_test: "{{ group[ec2_tag_Contact] | default('It didn't work', true) }}"
 
   tasks:
   - name: Debug hostvars
     debug:
+      var: hostvars
+
+  - name: Debug groups
+    debug:
       var: groups
+
+  - name: Debug my variable
+    debug:
+      var: my_test
 
   - name: Debug my variable
     debug:
