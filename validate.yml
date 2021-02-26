@@ -1,0 +1,25 @@
+---
+
+-
+  hosts: "{{ my_devices }}"
+  gather_facts: "{{ my_facts }}"
+  connection: ansible.netcommon.network_cli
+  vars:
+    ansible_network_os: cisco.ios.ios
+    ansible_user: "changeme"
+    ansible_password: "changeme"
+
+  tasks:
+    - name: Fetch interface state and parse with pyats
+      ansible.utils.cli_parse:
+        command: show interface
+        parser:
+          name: ansible.netcommon.pyats
+      register: ios_pyats_show_interface
+
+    - name: print structured interface state data
+      ansible.builtin.debug:
+        msg: "{{ ios_pyats_show_interface['parsed'] }}"
+
+
+...
