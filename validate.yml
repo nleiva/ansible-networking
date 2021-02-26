@@ -3,17 +3,15 @@
 # ansible-galaxy collection install ansible.utils
 # ansible-galaxy collection install ansible.netcommon
 # ansible-galaxy collection install cisco.ios
--
-  hosts: "{{ my_devices }}"
-  gather_facts: "{{ my_facts }}"
+
+- hosts: "{{ my_devices }}"
   connection: ansible.netcommon.network_cli
+  gather_facts: "{{ my_facts }}"
   vars:
     ansible_network_os: cisco.ios.ios
-    ansible_user: "changeme"
-    ansible_password: "changeme"
 
   tasks:
-  - name: "Fetch interface state and parse with pyats"
+  - name: Fetch interface state and parse with pyats
     ansible.utils.cli_parse:
       command: show interface
       parser:
