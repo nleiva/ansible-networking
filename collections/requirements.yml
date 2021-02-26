@@ -2,7 +2,7 @@
 collections:
   - name: ansible.netcommon
   - name: ansible.utils
-  - name: cisco.ios.ios
+  - name: cisco.ios
  # Install a collection from Ansible Galaxy.
   - name: cisco.meraki
     source: https://galaxy.ansible.com

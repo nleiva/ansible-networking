@@ -1,5 +1,5 @@
 ---
-# Need 
+# Need to add to requirements file these:
 # ansible-galaxy collection install ansible.utils
 # ansible-galaxy collection install ansible.netcommon
 # ansible-galaxy collection install cisco.ios
