@@ -1,11 +1,11 @@
 - name: Fetch {{ command }} and parse it with pyATS
   ansible.utils.cli_parse:
-    command: {{ command }}
+    command: "{{ command }}"
     parser:
       name: ansible.netcommon.pyats
   register: output
   vars:
-    output: ios_pyats_{{ command | join('_') }}
+    output: "ios_pyats_{{ command | join('_') }}"
 
 - name: Print structured {{ command }} data
   ansible.builtin.debug:
