@@ -24,7 +24,7 @@
 
   - name: Fetch interface state and parse with pyats
     ansible.utils.cli_parse:
-      command: show interface
+      command: show interfaces
       parser:
         name: ansible.netcommon.pyats
     register: ios_pyats_show_interface
