@@ -6,8 +6,9 @@
   register: output
   ignore_errors: true
 
-- set_fact:
-    my_dict: "{{ my_dict | default({}) | combine( {command: output['parsed']}) }}"
+- name: Create custom dictionary with command outputs
+  set_fact:
+    my_dict: "{{ my_dict | default({}) | combine( {command: (output['parsed'] | default('empty', true)) }) }}"
 
 # - name: Print structured {{ command }} data
 #   ansible.builtin.debug:
