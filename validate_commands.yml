@@ -4,6 +4,7 @@
     parser:
       name: ansible.netcommon.pyats
   register: output
+  ignore_errors: true
 
 - set_fact:
     my_dict: "{{ my_dict | default({}) | combine( {command: output['parsed']}) }}"
