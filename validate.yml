@@ -22,20 +22,20 @@
     loop_control:
       loop_var: command
 
-- name: Print all structured {{ command }} data - OPTION 1
-  ansible.builtin.debug:
-    var: my_dict
+  - name: Print all structured {{ command }} data - OPTION 1
+    ansible.builtin.debug:
+      var: my_dict
 
-- name: Print all structured {{ command }} data - OPTION 2
-  ansible.builtin.debug:
-    var: output.results[index] 
-  loop:
-    - 0
-    - 1
-    - 2
-    - 3
-    - 4
-  loop_control:
-    loop_var: index
+  - name: Print all structured {{ command }} data - OPTION 2
+    ansible.builtin.debug:
+      var: output.results[index] 
+    loop:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+    loop_control:
+      loop_var: index
 
 ...
