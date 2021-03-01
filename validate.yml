@@ -11,27 +11,23 @@
     ansible_network_os: cisco.ios.ios
 
   tasks:
-  - name: Fetch version and parse with pyats
-    ansible.utils.cli_parse:
-      command: show version
-      parser:
-        name: ansible.netcommon.pyats
-    register: ios_pyats_show_version
+  # - name: Fetch version and parse with pyats
+  #   ansible.utils.cli_parse:
+  #     command: show version
+  #     parser:
+  #       name: ansible.netcommon.pyats
+  #   register: ios_pyats_show_version
 
-  - name: print structured interface state data
-    ansible.builtin.debug:
-      msg: "{{ ios_pyats_show_version['parsed'] }}"
+  # - name: print structured interface state data
+  #   ansible.builtin.debug:
+  #     msg: "{{ ios_pyats_show_version['parsed'] }}"
 
-  - name: Fetch interface state and parse with pyats
-    ansible.utils.cli_parse:
-      command: show interfaces
-      parser:
-        name: ansible.netcommon.pyats
-    register: ios_pyats_show_interface
-
-  - name: print structured interface state data
-    ansible.builtin.debug:
-      msg: "{{ ios_pyats_show_interface['parsed'] }}"
-
+  - name: Parse list of commands
+    include_tasks: validate_commands.yml
+    loop:
+      - show version
+      - show interfaces
+    loop_control:
+      loop_var: command
 
 ...
