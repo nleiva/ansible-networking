@@ -12,7 +12,9 @@
 
   tasks:
   - name: Fetch interface state and parse with pyats
-    ansible.utils.cli_parse:
+    # ansible.utils.cli_parse:
+    # temporary workaround: https://github.com/ansible-collections/ansible.utils/pull/45
+    ansible.netcommon.cli_parse:
       command: show interface
       parser:
         name: ansible.netcommon.pyats
