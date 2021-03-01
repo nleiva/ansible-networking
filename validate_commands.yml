@@ -4,9 +4,10 @@
     parser:
       name: ansible.netcommon.pyats
   register: output
-  vars:
-    output: "ios_pyats_{{ command | join('_') }}"
+
+- set_fact:
+    my_dict: "{{ my_dict | default({}) | combine( {command: output['parsed']}) }}"
 
 - name: Print structured {{ command }} data
   ansible.builtin.debug:
-    msg: "{{ lookup('vars', output)['parsed'] }}"
+    msg: "{{ my_dict[command] }}"
