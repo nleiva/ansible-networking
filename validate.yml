@@ -11,23 +11,31 @@
     ansible_network_os: cisco.ios.ios
 
   tasks:
-  # - name: Fetch version and parse with pyats
-  #   ansible.utils.cli_parse:
-  #     command: show version
-  #     parser:
-  #       name: ansible.netcommon.pyats
-  #   register: ios_pyats_show_version
-
-  # - name: print structured interface state data
-  #   ansible.builtin.debug:
-  #     msg: "{{ ios_pyats_show_version['parsed'] }}"
-
   - name: Parse list of commands
     include_tasks: validate_commands.yml
     loop:
       - show version
       - show interfaces
+      - show lldp neighbors
+      - show ip bgp summary
+      - show ip ospf neighbor
     loop_control:
       loop_var: command
+
+- name: Print all structured {{ command }} data - OPTION 1
+  ansible.builtin.debug:
+    var: my_dict
+
+- name: Print all structured {{ command }} data - OPTION 2
+  ansible.builtin.debug:
+    var: output.results[index] 
+  loop:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+  loop_control:
+    loop_var: index
 
 ...

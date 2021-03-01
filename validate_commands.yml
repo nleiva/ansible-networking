@@ -8,6 +8,6 @@
 - set_fact:
     my_dict: "{{ my_dict | default({}) | combine( {command: output['parsed']}) }}"
 
-- name: Print structured {{ command }} data
-  ansible.builtin.debug:
-    msg: "{{ my_dict[command] }}"
+# - name: Print structured {{ command }} data
+#   ansible.builtin.debug:
+#     msg: "{{ my_dict[command] }}"
