@@ -18,7 +18,7 @@
     # - name: Print out interfaces
     #   debug:
     #     var: interfaces
-  
+
     - name: Print out flatten interfaces input
       debug:
         msg:  "{{ lookup('ansible.utils.to_paths', interfaces) }}"

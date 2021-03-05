@@ -2,6 +2,6 @@
 - name: Print out a WARNING if OSPF state is not FULL
   debug:
     msg: "WARNING: Neighbor {{ info.key }}, with address {{ info.value.address }} is in state {{ info.value.state[0:4]  }}"
-  vars: 
+  vars:
     info: "{{ lookup('dict', data) }}"
   when: info.value.state[0:4] != "FULL"
