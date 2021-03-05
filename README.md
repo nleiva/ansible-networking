@@ -18,3 +18,4 @@ I'm using this [ansible-inventory](https://github.com/nleiva/ansible-inventory/b
 - [Parse IOS XE ACL's](ios-genie-show-acl.md)
 - [Parse IOS XE SW Version](ios-genie-show-ver.md)
 - [Show config differences](show-diff.md)
+- [Parse JSON outputs](test-json.md)

@@ -1,0 +1,8 @@
+- name: Show BGP neighbor info
+  ansible.builtin.debug:
+    var: my_dict['show ip bgp summary'].vrf.default.neighbor
+
+- name: Iterate over OSPF info
+  ansible.builtin.debug:
+    var: item
+  loop: "{{ my_dict['show ip ospf neighbor'] | community.general.json_query('interfaces.*.neighbors[]') }}"

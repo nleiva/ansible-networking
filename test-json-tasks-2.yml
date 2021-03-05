@@ -1,0 +1,6 @@
+---
+- name: Print out neighbor data - FORMAT 2
+  debug:
+    msg: "Neighbor: {{ info.key }}, with address: {{ info.value.address }} -> State: {{ info.value.state[0:4]  }}"
+  vars: 
+    info: "{{ lookup('dict', data) }}"

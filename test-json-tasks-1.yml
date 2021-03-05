@@ -1,0 +1,6 @@
+---
+- name: Print out neighbor data - FORMAT 1
+  debug:
+    msg: "Neighbor: {{ data[0].key }}, with address: {{ data[0].value.address }} -> State: {{ data[0].value.state[0:4]  }}"
+  vars:
+    data: "{{ item.value.neighbors | dict2items }}"

@@ -1,8 +1,9 @@
 ---
 # Need to add to requirements file these:
-# ansible-galaxy collection install ansible.utils
+# ansible-galaxy collection install ansible.utils # version greater than 2.0.1
 # ansible-galaxy collection install ansible.netcommon
 # ansible-galaxy collection install cisco.ios
+# ansible-galaxy collection install community.general
 
 - hosts: "{{ my_devices }}"
   connection: ansible.netcommon.network_cli
@@ -22,25 +23,10 @@
     loop_control:
       loop_var: command
 
-  - name: Print all structured data
-    ansible.builtin.debug:
-      var: my_dict
-
-  - name: Print structured data for a specific command
-    ansible.builtin.debug:
-      var: my_dict['show ip bgp summary']
-
-  # This one is not working as expected
-  # - name: Print all structured {{ command }} data - OPTION 2
+  # - name: Print all structured data
   #   ansible.builtin.debug:
-  #     var: output.results[index]
-  #   loop:
-  #     - 0
-  #     - 1
-  #     - 2
-  #     - 3
-  #     - 4
-  #   loop_control:
-  #     loop_var: index
+  #     var: my_dict
 
+  - name: Validate state from commands
+    include_tasks: validate_state.yml
 ...
