@@ -106,12 +106,6 @@ Latest version -> [test-json](test-json.yml). The following output might be outd
         with_items: "{{ neighbors }}"
         loop_control:
           loop_var: data
-
-      - name: Print the neighbors that does not satisfy the desired state
-        ansible.builtin.debug:
-          msg: "{{ item['data_path'].split('.')[0] }}"
-        loop: "{{ result['errors'] }}"
-        when: "'errors' in result"
 ```
 
 ## Output
@@ -209,17 +203,22 @@ included: /home/nleiva/Ansible/ansible-networking/test-json-tasks-4.yml for loca
 TASK [Validate state of the neighbor is FULL] *************************************************************************************************************
 ok: [localhost]
 
+TASK [Print the neighbor that does not satisfy the desired state] *****************************************************************************************
+skipping: [localhost]
+
 TASK [Validate state of the neighbor is FULL] *************************************************************************************************************
 fatal: [localhost]: FAILED! => {"changed": false, "errors": [{"data_path": "203.0.113.2.state", "expected": "^FULL", "found": "INIT/  -", "json_path": "$.203.0.113.2.state", "message": "'INIT/  -' does not match '^FULL'", "relative_schema": {"pattern": "^FULL", "type": "string"}, "schema_path": "patternProperties..*.properties.state.pattern", "validator": "pattern"}], "msg": "Validation errors were found.\nAt 'patternProperties..*.properties.state.pattern' 'INIT/  -' does not match '^FULL'. "}
 ...ignoring
 
-TASK [Print the neighbors that does not satisfy the desired state] ****************************************************************************************
-ok: [localhost] => (item={'message': "'INIT/  -' does not match '^FULL'", 'data_path': '203.0.113.2.state', 'json_path': '$.203.0.113.2.state', 'schema_path': 'patternProperties..*.properties.state.pattern', 'relative_schema': {'type': 'string', 'pattern': '^FULL'}, 'expected': '^FULL', 'validator': 'pattern', 'found': 'INIT/  -'}) => {
-    "msg": "203"
+TASK [Print the neighbor that does not satisfy the desired state] *****************************************************************************************
+ok: [localhost] => {
+    "msg": [
+        "WARNING: Neighbor 203.0.113.2, with address 192.0.2.2 is in state INIT",
+        "203.0.113.2.state, found: INIT/  -, expected: ^FULL"
+    ]
 }
 
 PLAY RECAP ************************************************************************************************************************************************
-localhost                  : ok=20   changed=0    unreachable=0    failed=0    skipped=1    rescued=0    ignored=1 
-
+localhost                  : ok=20   changed=0    unreachable=0    failed=0    skipped=2    rescued=0    ignored=1   
 ```
 
