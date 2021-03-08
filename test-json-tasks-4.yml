@@ -10,7 +10,7 @@
 
 - name: Print the neighbor that does not satisfy the desired state
   ansible.builtin.debug:
-    msg: 
+    msg:
       - "WARNING: Neighbor {{ info.key }}, with address {{ info.value.address }} is in state {{ info.value.state[0:4] }}"
       - "{{ error.data_path }}, found: {{ error.found }}, expected: {{ error.expected }}"
   when: "'errors' in result"
