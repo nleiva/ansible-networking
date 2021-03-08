@@ -1,0 +1,22 @@
+{
+ "$schema": "http://json-schema.org/draft-07/schema#",
+ "definitions": {
+     "neighbor" : {
+         "type" : "object",
+         "properties" : {
+             "address" : {"type" : "string"},
+             "dead_time" : {"type" : "string"},
+             "priority" : {"type" : "number"},
+             "state" : {
+                 "type" : "string",
+                 "pattern" : "^FULL"
+                 }
+             },
+         "required" : [ "address","state" ]
+     }
+ },
+ "type": "object",
+ "patternProperties": {
+     ".*" : { "$ref" : "#/definitions/neighbor" }
+ }
+}

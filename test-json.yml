@@ -59,3 +59,17 @@
         debug:
           var: "{{ item }}"
         with_items: "{{ input | json_query('test.interfaces.*.neighbors[].*.[address, state]') }}"
+
+    - name: TEST 5
+      block:
+      - name: Loop over neighbors and validate data with a schema
+        include_tasks: test-json-tasks-4.yml
+        with_items: "{{ neighbors }}"
+        loop_control:
+          loop_var: data
+
+      - name: Print the neighbors that does not satisfy the desired state
+        ansible.builtin.debug:
+          msg: "{{ item['data_path'].split('.')[0] }}"
+        loop: "{{ result['errors'] }}"
+        when: "'errors' in result"

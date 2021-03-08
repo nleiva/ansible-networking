@@ -98,6 +98,20 @@ Latest version -> [test-json](test-json.yml). The following output might be outd
         debug:
           var: "{{ item }}"
         with_items: "{{ input | json_query('test.interfaces.*.neighbors[].*.[address, state]') }}"
+
+    - name: TEST 5
+      block:
+      - name: Loop over neighbors and validate data with a schema
+        include_tasks: test-json-tasks-4.yml
+        with_items: "{{ neighbors }}"
+        loop_control:
+          loop_var: data
+
+      - name: Print the neighbors that does not satisfy the desired state
+        ansible.builtin.debug:
+          msg: "{{ item['data_path'].split('.')[0] }}"
+        loop: "{{ result['errors'] }}"
+        when: "'errors' in result"
 ```
 
 ## Output
@@ -108,12 +122,12 @@ The following output might be outdated.
 ⇨  ansible-playbook test-json.yml 
 [WARNING]: provided hosts list is empty, only localhost is available. Note that the implicit localhost does not match 'all'
 
-PLAY [Play around with JSON inputs] *************************************************************************************************************
+PLAY [Play around with JSON inputs] ***********************************************************************************************************************
 
-TASK [Create interfaces Dictionary] *************************************************************************************************************
+TASK [Create interfaces Dictionary] ***********************************************************************************************************************
 ok: [localhost]
 
-TASK [Print out flatten interfaces input] *******************************************************************************************************
+TASK [Print out flatten interfaces input] *****************************************************************************************************************
 ok: [localhost] => {
     "msg": {
         "Tunnel0.neighbors['203.0.113.2'].address": "198.51.100.2",
@@ -127,50 +141,50 @@ ok: [localhost] => {
     }
 }
 
-TASK [Loop over interfaces] *********************************************************************************************************************
+TASK [Loop over interfaces] *******************************************************************************************************************************
 included: /home/nleiva/Ansible/ansible-networking/test-json-tasks-1.yml for localhost
 included: /home/nleiva/Ansible/ansible-networking/test-json-tasks-1.yml for localhost
 
-TASK [Print out neighbor data - FORMAT 1] *******************************************************************************************************
+TASK [Print out neighbor data - FORMAT 1] *****************************************************************************************************************
 ok: [localhost] => {
     "msg": "Neighbor: 203.0.113.2, with address: 198.51.100.2 -> State: FULL"
 }
 
-TASK [Print out neighbor data - FORMAT 1] *******************************************************************************************************
+TASK [Print out neighbor data - FORMAT 1] *****************************************************************************************************************
 ok: [localhost] => {
     "msg": "Neighbor: 203.0.113.2, with address: 192.0.2.2 -> State: INIT"
 }
 
-TASK [Create neighbors dictionary (this is now per interface)] **********************************************************************************
+TASK [Create neighbors dictionary (this is now per interface)] ********************************************************************************************
 ok: [localhost]
 
-TASK [Loop over neighbors] **********************************************************************************************************************
+TASK [Loop over neighbors] ********************************************************************************************************************************
 included: /home/nleiva/Ansible/ansible-networking/test-json-tasks-2.yml for localhost
 included: /home/nleiva/Ansible/ansible-networking/test-json-tasks-2.yml for localhost
 
-TASK [Print out neighbor data - FORMAT 2] *******************************************************************************************************
+TASK [Print out neighbor data - FORMAT 2] *****************************************************************************************************************
 ok: [localhost] => {
     "msg": "Neighbor: 203.0.113.2, with address: 198.51.100.2 -> State: FULL"
 }
 
-TASK [Print out neighbor data - FORMAT 2] *******************************************************************************************************
+TASK [Print out neighbor data - FORMAT 2] *****************************************************************************************************************
 ok: [localhost] => {
     "msg": "Neighbor: 203.0.113.2, with address: 192.0.2.2 -> State: INIT"
 }
 
-TASK [Loop over neighbors] **********************************************************************************************************************
+TASK [Loop over neighbors] ********************************************************************************************************************************
 included: /home/nleiva/Ansible/ansible-networking/test-json-tasks-3.yml for localhost
 included: /home/nleiva/Ansible/ansible-networking/test-json-tasks-3.yml for localhost
 
-TASK [Print out a WARNING if OSPF state is not FULL] ********************************************************************************************
+TASK [Print out a WARNING if OSPF state is not FULL] ******************************************************************************************************
 skipping: [localhost]
 
-TASK [Print out a WARNING if OSPF state is not FULL] ********************************************************************************************
+TASK [Print out a WARNING if OSPF state is not FULL] ******************************************************************************************************
 ok: [localhost] => {
     "msg": "WARNING: Neighbor 203.0.113.2, with address 192.0.2.2 is in state INIT"
 }
 
-TASK [Loop with deep json_query] ****************************************************************************************************************
+TASK [Loop with deep json_query] **************************************************************************************************************************
 ok: [localhost] => (item=['198.51.100.2', 'FULL/  -']) => {
     "<class 'list'>": "VARIABLE IS NOT DEFINED!",
     "ansible_loop_var": "item",
@@ -188,8 +202,24 @@ ok: [localhost] => (item=['192.0.2.2', 'INIT/  -']) => {
     ]
 }
 
-PLAY RECAP **************************************************************************************************************************************
-localhost                  : ok=15   changed=0    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0   
+TASK [Loop over neighbors and validate data with a schema] ************************************************************************************************
+included: /home/nleiva/Ansible/ansible-networking/test-json-tasks-4.yml for localhost
+included: /home/nleiva/Ansible/ansible-networking/test-json-tasks-4.yml for localhost
+
+TASK [Validate state of the neighbor is FULL] *************************************************************************************************************
+ok: [localhost]
+
+TASK [Validate state of the neighbor is FULL] *************************************************************************************************************
+fatal: [localhost]: FAILED! => {"changed": false, "errors": [{"data_path": "203.0.113.2.state", "expected": "^FULL", "found": "INIT/  -", "json_path": "$.203.0.113.2.state", "message": "'INIT/  -' does not match '^FULL'", "relative_schema": {"pattern": "^FULL", "type": "string"}, "schema_path": "patternProperties..*.properties.state.pattern", "validator": "pattern"}], "msg": "Validation errors were found.\nAt 'patternProperties..*.properties.state.pattern' 'INIT/  -' does not match '^FULL'. "}
+...ignoring
+
+TASK [Print the neighbors that does not satisfy the desired state] ****************************************************************************************
+ok: [localhost] => (item={'message': "'INIT/  -' does not match '^FULL'", 'data_path': '203.0.113.2.state', 'json_path': '$.203.0.113.2.state', 'schema_path': 'patternProperties..*.properties.state.pattern', 'relative_schema': {'type': 'string', 'pattern': '^FULL'}, 'expected': '^FULL', 'validator': 'pattern', 'found': 'INIT/  -'}) => {
+    "msg": "203"
+}
+
+PLAY RECAP ************************************************************************************************************************************************
+localhost                  : ok=20   changed=0    unreachable=0    failed=0    skipped=1    rescued=0    ignored=1 
 
 ```
 

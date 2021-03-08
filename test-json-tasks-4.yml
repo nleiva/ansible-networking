@@ -1,0 +1,9 @@
+---
+- name: Validate state of the neighbor is FULL
+  ansible.utils.validate:
+    data: "{{ data }}"
+    criteria:
+      - "{{ lookup('file',  './files/schema.json') | from_json }}"
+    engine: ansible.utils.jsonschema
+  ignore_errors: true
+  register: result
