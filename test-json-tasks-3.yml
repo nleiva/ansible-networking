@@ -4,4 +4,5 @@
     msg: "WARNING: Neighbor {{ info.key }}, with address {{ info.value.address }} is in state {{ info.value.state[0:4]  }}"
   vars:
     info: "{{ lookup('dict', data) }}"
-  when: info.value.state[0:4] != "FULL"
+  # when: info.value.state[0:4] != "FULL"
+  when: info.value.state is not match("FULL.*")
