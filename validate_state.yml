@@ -1,8 +1,8 @@
 - name: Show BGP neighbor info
   ansible.builtin.debug:
     msg: "{{ lookup('ansible.utils.to_paths', bgp_neighbors) }}"
-  vars: 
-    bgp_neighbors: my_dict['show ip bgp summary'].vrf.default.neighbor
+  vars:
+    bgp_neighbors: "{{ my_dict['show ip bgp summary'].vrf.default.neighbor }}"
 
 - name: Create OSPF neighbors dictionary
   set_fact:

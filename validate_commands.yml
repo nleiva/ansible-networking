@@ -6,7 +6,7 @@
   register: output
   ignore_errors: true
 
-- name: Create custom dictionary with command outputs
+- name: Add {{ command }} to dictionary with command outputs
   set_fact:
     my_dict: "{{ my_dict | default({}) | combine( { command: (output['parsed'] | default('empty', true)) }) }}"
 
