@@ -4,14 +4,6 @@
   connection: local
 
   tasks:
-  - name: Print host
-    debug:
-      msg: "{{ lookup('env', 'TOWER_HOST') }}"
-
-  - name: Print user
+  - name: Print Tower user
     debug:
       msg: '{{ tower_user_name }}'
-
-  - name: Print password
-    debug:
-      msg: '{{ ansible_password }}'
