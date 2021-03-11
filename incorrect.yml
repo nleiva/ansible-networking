@@ -6,12 +6,12 @@
   tasks:
   - name: Print host
     debug:
-      msg: '{{ lookup("env", "TOWER_HOST") }}'
+      msg: "{{ lookup('env', 'TOWER_HOST') }}"
 
   - name: Print user
     debug:
-      msg: '{{ lookup("env", "TOWER_USERNAME") }}'
+      msg: '{{ tower_user_name }}'
 
   - name: Print password
     debug:
-      msg: '{{ lookup("env", "TOWER_PASSWORD") }}'
+      msg: '{{ ansible_password }}'
