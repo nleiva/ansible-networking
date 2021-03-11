@@ -1,0 +1,17 @@
+- # hosts: "{{ my_devices }}"
+  connection: ansible.netcommon.network_cli
+  gather_facts: "{{ my_facts }}"
+  vars:
+    ansible_network_os: cisco.ios.ios
+
+  tasks:
+  - name: Parse list of commands
+    include_tasks: validate_commands.yml
+    loop:
+      - show version
+      - show interfaces
+      - show lldp neighbors
+      - show ip bgp summary
+      - show ip ospf neighbor
+    loop_control:
+      loop_var: command
