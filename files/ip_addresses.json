@@ -1,0 +1,20 @@
+{
+   "syncToken": "0123456789",
+   "createDate": "yyyy-mm-dd-hh-mm-ss",
+   "prefixes": [
+     {
+       "ip_prefix": "192.0.2.0/24",
+       "region": "region",
+       "network_border_group": "network_border_group",
+       "service": "subset"
+     }
+   ],
+   "ipv6_prefixes": [
+     {
+       "ipv6_prefix": "2001:db8:cafe::/64",
+       "region": "region",
+       "network_border_group": "network_border_group",
+       "service": "subset"
+     }
+   ]  
+ }
