@@ -23,3 +23,16 @@ tasks:
   - name: DISPLAY COMPLETE BIG-IP SYSTEM INFORMATION
     debug:
       var: device_facts
+
+  - name: DISPLAY ONLY THE MAC ADDRESS
+    debug:
+      var: device_facts['system_info']['base_mac_address']
+
+  - name: DISPLAY ONLY THE VERSION
+    debug:
+      var: device_facts['system_info']['product_version']
+
+  - name: DISPLAY COMPLETE BIG-IP SYSTEM INFORMATION
+    debug:
+      var: device_facts
+    tags: debug
