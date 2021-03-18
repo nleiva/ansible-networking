@@ -30,19 +30,26 @@
 
     - name: TEST 2
       block:
-      - name: Print first and last ip of an IP range (query by index number)
+      - name: Print first and last ip of an IPv4 range (query by index number)
         debug:
           msg: "{{ item.ip_prefix | ipaddr('1') | ipv4('address') }}-{{ item.ip_prefix | ipaddr('-1') | ipv4('address') }}"
         with_items: "{{ ipv4_list }}"
 
     - name: TEST 3
       block:
+      - name: Print first and last ip of an IPv6 range (query by index number)
+        debug:
+          msg: "{{ item.ipv6_prefix | ipaddr('1') | ipv6('address') }}-{{ item.ipv6_prefix | ipaddr('-1') | ipv6('address') }}"
+        with_items: "{{ ipv6_list }}"
+
+    - name: TEST 4
+      block:
       - name: Check if values in 'test_list' are in the range of an IPv4 prefix
         debug:
           msg: "{{ test_list | ipaddr(item.ip_prefix) }}"
         with_items: "{{ ipv4_list }}"
 
-    - name: TEST 4
+    - name: TEST 5
       block:
       - name: Check if values in 'test_list' are in the range of an IPv6 prefix
         debug:

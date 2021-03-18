@@ -63,19 +63,26 @@ Latest version -> [ip_range](ip_range.yml). The following output might be outdat
 
     - name: TEST 2
       block:
-      - name: Print first and last ip of an IP range (query by index number)
+      - name: Print first and last ip of an IPv4 range (query by index number)
         debug:
           msg: "{{ item.ip_prefix | ipaddr('1') | ipv4('address') }}-{{ item.ip_prefix | ipaddr('-1') | ipv4('address') }}"
         with_items: "{{ ipv4_list }}"
 
     - name: TEST 3
       block:
+      - name: Print first and last ip of an IPv6 range (query by index number)
+        debug:
+          msg: "{{ item.ipv6_prefix | ipaddr('1') | ipv6('address') }}-{{ item.ipv6_prefix | ipaddr('-1') | ipv6('address') }}"
+        with_items: "{{ ipv6_list }}"
+
+    - name: TEST 4
+      block:
       - name: Check if values in 'test_list' are in the range of an IPv4 prefix
         debug:
           msg: "{{ test_list | ipaddr(item.ip_prefix) }}"
         with_items: "{{ ipv4_list }}"
 
-    - name: TEST 4
+    - name: TEST 5
       block:
       - name: Check if values in 'test_list' are in the range of an IPv6 prefix
         debug:
@@ -93,10 +100,10 @@ The following output might be outdated.
 
 PLAY [Play around with IP address ranges] ****************************************************************************************
 
-TASK [Create IPv4 List] ****************************************************************************************************
+TASK [Create IPv4 List] **********************************************************************************************************
 ok: [localhost]
 
-TASK [Create IPv6 List] ****************************************************************************************************
+TASK [Create IPv6 List] **********************************************************************************************************
 ok: [localhost]
 
 TASK [Loop over IPv4 addresses] **************************************************************************************************
@@ -104,9 +111,14 @@ ok: [localhost] => (item={'ip_prefix': '192.0.2.0/24', 'region': 'region', 'netw
     "msg": "192.0.2.0/24"
 }
 
-TASK [Print first and last ip of an IP range (query by index number)] ************************************************************
+TASK [Print first and last ip of an IPv4 range (query by index number)] **********************************************************
 ok: [localhost] => (item={'ip_prefix': '192.0.2.0/24', 'region': 'region', 'network_border_group': 'network_border_group', 'service': 'subset'}) => {
     "msg": "192.0.2.1-192.0.2.255"
+}
+
+TASK [Print first and last ip of an IPv6 range (query by index number)] **********************************************************
+ok: [localhost] => (item={'ipv6_prefix': '2001:db8:cafe::/64', 'region': 'region', 'network_border_group': 'network_border_group', 'service': 'subset'}) => {
+    "msg": "2001:db8:cafe::1-2001:db8:cafe:0:ffff:ffff:ffff:ffff"
 }
 
 TASK [Check if values in 'test_list' are in the range of an IPv4 prefix] *********************************************************
@@ -124,6 +136,6 @@ ok: [localhost] => (item={'ipv6_prefix': '2001:db8:cafe::/64', 'region': 'region
 }
 
 PLAY RECAP ***********************************************************************************************************************
-localhost                  : ok=6    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+localhost                  : ok=7    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 ```
 
