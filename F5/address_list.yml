@@ -40,6 +40,6 @@
       when: not create
 
     - name: Display output
-      debug:
+      ansible.builtin.debug:
         var: output
       tags: debug
