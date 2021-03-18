@@ -1,0 +1,45 @@
+---
+# ansible-galaxy collection install f5networks.f5_modules
+# ansible-playbook -i ../../f5-host address_list.yml  --skip-tags=debug
+# One of the following features must be licensed/provisioned for the URI security/firewall/address-list : afm asm dos cgnat
+# UI: https://<ansible_host>:8443/tmui/login.jsp System/License/Modules
+# AbstractDigestAuthHandler does not support the following scheme: 'X-Auth-Token'
+# Reboot: https://github.com/F5Networks/f5-ansible/issues/1798
+
+- name: Manage address lists on BIG-IP AFM
+  hosts: f5
+  connection: local
+  gather_facts: false
+  vars:
+    create: false
+    bigip_provider:
+      server: "{{ ansible_host }}"
+      user: "{{ ansible_user }}"
+      password: "{{ ansible_password }}"
+      server_port: 8443
+      validate_certs: false
+
+  tasks:
+    - name: Create an address list
+      f5networks.f5_modules.bigip_firewall_address_list:
+        name: foo
+        addresses:
+          - 3.3.3.3
+          - 4.4.4.4
+          - 5.5.5.5
+        provider: "{{ bigip_provider }}"
+      register: output
+      when: create
+
+    - name: Remove an address list
+      f5networks.f5_modules.bigip_firewall_address_list:
+        name: foo
+        state: absent
+        provider: "{{ bigip_provider }}"
+      register: output
+      when: not create
+
+    - name: Display output
+      debug:
+        var: output
+      tags: debug
