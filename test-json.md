@@ -16,7 +16,7 @@ JSON file [ospf.json](files/ospf.json).
 
 ```json
 { 
-    "test": {
+    "parsed": {
        "interfaces": {
            "Tunnel0": {
                "neighbors": {
@@ -60,7 +60,7 @@ Latest version -> [test-json](test-json.yml). The following output might be outd
   tasks:
     - name: Create interfaces Dictionary
       set_fact:
-        interfaces: "{{ input.test.interfaces }}"
+        interfaces: "{{ input.parsed.interfaces }}"
   
     - name: Print out flatten interfaces input
       debug:
@@ -97,7 +97,7 @@ Latest version -> [test-json](test-json.yml). The following output might be outd
       - name: Loop with deep json_query
         debug:
           var: "{{ item }}"
-        with_items: "{{ input | json_query('test.interfaces.*.neighbors[].*.[address, state]') }}"
+        with_items: "{{ input | json_query('parsed.interfaces.*.neighbors[].*.[address, state]') }}"
 
     - name: TEST 5
       block:

@@ -13,11 +13,11 @@
   tasks:
     - name: Create interfaces Dictionary
       set_fact:
-        interfaces: "{{ input.test.interfaces }}"
+        interfaces: "{{ input.parsed.interfaces }}"
 
-    # - name: Print out interfaces
-    #   debug:
-    #     var: interfaces
+    - name: Print out interfaces
+      debug:
+        var: interfaces
 
     - name: Print out flatten interfaces input
       debug:
@@ -35,9 +35,9 @@
         set_fact:
           neighbors: "{{ interfaces | json_query('*.neighbors') }}"
 
-      # - name: Print out neighbors
-      #   debug:
-      #     msg: "{{ neighbors }}"
+      - name: Print out neighbors
+        debug:
+          msg: "{{ neighbors }}"
 
       - name: Loop over neighbors
         include_tasks: test-json-tasks-2.yml
@@ -58,7 +58,7 @@
       - name: Loop with deep json_query
         debug:
           var: "{{ item }}"
-        with_items: "{{ input | json_query('test.interfaces.*.neighbors[].*.[address, state]') }}"
+        with_items: "{{ input | json_query('parsed.interfaces.*.neighbors[].*.[address, state]') }}"
 
     - name: TEST 5
       block:
