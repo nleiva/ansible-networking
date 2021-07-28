@@ -36,9 +36,9 @@
         loop: "{{ required_servers }}"
       when: not erase|bool
 
-    - name: Save template to temporary file
-      debug:
-        msg: "{{ hostvars }}"
+    # - name: Save template to temporary file
+    #   debug:
+    #     msg: "{{ hostvars }}"
 
     - name: Save template to temporary file
       template:

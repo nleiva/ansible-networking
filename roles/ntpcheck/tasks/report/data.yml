@@ -16,7 +16,7 @@
     cacheable: yes
   with_items: "{{ unnecessary_servers }}"
 
-- name: Print out fidings for reporting [{{ ansible_network_os | default("unknown OS") }}]
+- name: Print out findings for reporting [{{ ansible_network_os | default("unknown OS") }}]
   debug:
     msg:
     - "We are missing the following NTP Servers in {{ ansible_network_os | upper }}: {{ in_servers | list }}"
