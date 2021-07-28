@@ -37,6 +37,10 @@
       when: not erase|bool
 
     - name: Save template to temporary file
+      debug:
+        msg: "{{ hostvars }}"
+
+    - name: Save template to temporary file
       template:
         src: report.j2
         dest: ./temp.html
