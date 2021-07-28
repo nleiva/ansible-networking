@@ -1,0 +1,64 @@
+---
+- name: NTP Server configuration compliance for Network Elements
+  hosts: "{{ my_devices }}"
+  connection: network_cli
+  gather_facts: "{{ my_facts }}"
+  vars:
+    erase: false
+    required_servers: []
+    in_servers: []
+    out_servers: []
+
+  tasks:
+    - name: Read inputs and prepare configs
+      set_fact:
+        required_servers: "{{ required_servers }} + [ 'ntp server {{ item }}' ]"
+      with_items: "{{ my_ntp_servers }}"
+
+    - name: Check existing NTP Servers
+      include_role:
+        name: ntpcheck
+      when: ansible_network_os is defined
+
+    # Adds NTP server entries in the my_ntp_servers variable if the variable erase is false
+    - block:
+      - name: Compare NTP servers and remove erroneous entries
+        cli_config:
+          config: no {{ item }}
+        loop: "{{ configured_servers }}"
+        when:
+          - configured_servers | length > 0
+          - item not in required_servers
+
+      - name: Ensure intended NTP servers are present
+        cli_config:
+          config: "{{ item }}"
+        loop: "{{ required_servers }}"
+      when: not erase|bool
+
+    - name: Save template to temporary file
+      template:
+        src: report.j2
+        dest: ./temp.html
+        mode: '0755'
+      when: in_servers | length > 0 or out_servers | length > 0
+
+    - name: Send report e-mail using SendGrid
+      sendgrid:
+        api_key: "{{ sendgrid_api_key }}"
+        from_address: "{{ sendgrid_from_address }}"
+        to_addresses: "{{ sendgrid_to_address }}"
+        subject: "{{ sendgrid_email_subject }}"
+        body: "{{ lookup('template', 'report.j2') }}"
+        html_body: true
+      delegate_to: localhost
+      run_once: true
+
+    # Erases all ntp server entries if the variable erase is true
+    - name: Remove all existing NTP server entries
+      cli_config:
+        config: no {{ item }}
+      loop: "{{ configured_servers }}"
+      when:
+        - configured_servers | length > 0
+        - erase|bool
