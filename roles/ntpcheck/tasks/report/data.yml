@@ -7,11 +7,13 @@
 - name: Create list of NEW servers to configure [{{ ansible_network_os | default("unknown OS") }}]
   set_fact:
     in_servers: "{{ in_servers }} + [ '{{ item.split(' ')[-1] }}' ]"
+    cacheable: yes
   with_items: "{{ missing_servers }}"
 
 - name: Create list of servers to remove [{{ ansible_network_os | default("unknown OS") }}]
   set_fact:
     out_servers: "{{ out_servers }} + [ '{{ item.split(' ')[-1] }}' ]"
+    cacheable: yes
   with_items: "{{ unnecessary_servers }}"
 
 - name: Print out fidings for reporting [{{ ansible_network_os | default("unknown OS") }}]
