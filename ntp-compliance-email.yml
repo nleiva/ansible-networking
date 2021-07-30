@@ -5,6 +5,7 @@
   gather_facts: "{{ my_facts }}"
   vars:
     erase: false
+    make_changes: false
     required_servers: []
     in_servers: []
     out_servers: []
@@ -34,7 +35,9 @@
         cli_config:
           config: "{{ item }}"
         loop: "{{ required_servers }}"
-      when: not erase|bool
+      when: 
+        - not erase|bool
+        - make_changes
 
     # - name: Save template to temporary file
     #   debug:
