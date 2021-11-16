@@ -1,19 +1,19 @@
 - name: Get current NTP servers [IOS]
-  cli_command:
+  ansible.netcommon.cli_command:
     command: show run | i ntp server
   register: output
 
 - name: Remove non config lines [IOS]
-  set_fact:
+  ansible.builtin.set_fact:
     configured_servers: "{{ output.stdout_lines | difference(dummy_list) }}"
   vars:
     dummy_list:
       - "Building configuration..."
 
 - name: Print current NTP servers [IOS]
-  debug:
+  ansible.builtin.debug:
     var: configured_servers
 
 ## Generate report data
 - name: Generate data for reporting
-  include_tasks: 'report/data.yml'
+  ansible.builtin.include_tasks: 'report/data.yml'

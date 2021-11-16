@@ -1,2 +1,2 @@
 - name: Check NTP config per vendor OS
-  include_tasks: "{{ ansible_network_os }}.yml"
+  ansible.builtin.include_tasks: "{{ ansible_network_os }}.yml"

@@ -1,10 +1,12 @@
 ---
 collections:
+  - name: amazon.aws
+    version: 2.0.0
   - name: ansible.netcommon
+    version: 2.0.0
   - name: ansible.utils
   - name: cisco.ios
 # - name: f5networks.f5_modules
   - name: community.general
- # Install a collection from Ansible Galaxy.
   - name: cisco.meraki
     source: https://galaxy.ansible.com

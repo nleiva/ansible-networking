@@ -1,19 +1,19 @@
 - name: Get current NTP servers [NX-OS]
-  cli_command:
+  ansible.netcommon.cli_command:
     command: show run | i 'ntp server'
   register: output
 
 - name: Remove use-vrf default [NX-OS]
-  set_fact:
+  ansible.builtin.set_fact:
     configured_servers: "{{ configured_servers }} + [ '{{ item | replace(' use-vrf default', '') }}' ]"
   with_items: "{{ output.stdout_lines }}"
   vars:
     configured_servers: []
 
 - name: Print current NTP servers [NX-OS]
-  debug:
+  ansible.builtin.debug:
     var: configured_servers
 
 ## Generate report data
 - name: Generate data for reporting
-  include_tasks: 'report/data.yml'
+  ansible.builtin.include_tasks: 'report/data.yml'
