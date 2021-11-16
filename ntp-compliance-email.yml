@@ -35,7 +35,7 @@
         cli_config:
           config: "{{ item }}"
         loop: "{{ required_servers }}"
-      when: 
+      when:
         - not erase|bool
         - make_changes
 
