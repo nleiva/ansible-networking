@@ -5,25 +5,26 @@
   gather_facts: "{{ my_facts }}"
   vars:
     erase: false
+    make_changes: false
     required_servers: []
     in_servers: []
     out_servers: []
 
   tasks:
     - name: Read inputs and prepare configs
-      ansible.builtin.set_fact:
+      set_fact:
         required_servers: "{{ required_servers }} + [ 'ntp server {{ item }}' ]"
       with_items: "{{ my_ntp_servers }}"
 
     - name: Check existing NTP Servers
-      ansible.builtin.include_role:
+      include_role:
         name: ntpcheck
       when: ansible_network_os is defined
 
     # Adds NTP server entries in the my_ntp_servers variable if the variable erase is false
     - block:
       - name: Compare NTP servers and remove erroneous entries
-        ansible.netcommon.cli_config:
+        cli_config:
           config: no {{ item }}
         loop: "{{ configured_servers }}"
         when:
@@ -31,35 +32,38 @@
           - item not in required_servers
 
       - name: Ensure intended NTP servers are present
-        ansible.netcommon.cli_config:
+        cli_config:
           config: "{{ item }}"
         loop: "{{ required_servers }}"
-      when: not erase|bool
+      when:
+        - not erase|bool
+        - make_changes
 
-    # - name: Render template
-    #   set_fact:
-    #     rendered_template: "{{ lookup('template', 'report.j2') }}"
+    # - name: Save template to temporary file
+    #   debug:
+    #     msg: "{{ hostvars }}"
 
     - name: Save template to temporary file
-      ansible.builtin.template:
+      template:
         src: report.j2
-        dest: "{{ playbook_dir }}/temp.html"
+        dest: ./temp.html
         mode: '0755'
       when: in_servers | length > 0 or out_servers | length > 0
 
-    # Creates and uploads a report to S3 
-    - name: Upload report to S3
-      amazon.aws.aws_s3:
-        bucket: "{{ my_bucket }}"
-        src: "{{ playbook_dir }}/temp.html"
-        object: "index.html"
-        mode: put
-        metadata: 'Content-Type=text/html'
-      when: in_servers | length > 0 or out_servers | length > 0
+    - name: Send report e-mail using SendGrid
+      sendgrid:
+        api_key: "{{ sendgrid_api_key }}"
+        from_address: "{{ sendgrid_from_address }}"
+        to_addresses: "{{ sendgrid_to_address }}"
+        subject: "{{ sendgrid_email_subject }}"
+        body: "{{ lookup('template', 'report.j2') }}"
+        html_body: true
+      delegate_to: localhost
+      run_once: true
 
     # Erases all ntp server entries if the variable erase is true
     - name: Remove all existing NTP server entries
-      ansible.netcommon.cli_config:
+      cli_config:
         config: no {{ item }}
       loop: "{{ configured_servers }}"
       when:

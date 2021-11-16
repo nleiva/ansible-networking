@@ -1,21 +1,23 @@
 ---
 - name: Determine configuration delta for reporting [{{ ansible_network_os | default("unknown OS") }}]
-  set_fact:
+  ansible.builtin.set_fact:
     missing_servers: "{{ required_servers | difference(configured_servers) }}"
     unnecessary_servers: "{{ configured_servers | difference(required_servers) }}"
 
 - name: Create list of NEW servers to configure [{{ ansible_network_os | default("unknown OS") }}]
-  set_fact:
+  ansible.builtin.set_fact:
     in_servers: "{{ in_servers }} + [ '{{ item.split(' ')[-1] }}' ]"
+    cacheable: yes
   with_items: "{{ missing_servers }}"
 
 - name: Create list of servers to remove [{{ ansible_network_os | default("unknown OS") }}]
-  set_fact:
+  ansible.builtin.set_fact:
     out_servers: "{{ out_servers }} + [ '{{ item.split(' ')[-1] }}' ]"
+    cacheable: yes
   with_items: "{{ unnecessary_servers }}"
 
-- name: Print out fidings for reporting [{{ ansible_network_os | default("unknown OS") }}]
-  debug:
+- name: Print out findings for reporting [{{ ansible_network_os | default("unknown OS") }}]
+  ansible.builtin.debug:
     msg:
     - "We are missing the following NTP Servers in {{ ansible_network_os | upper }}: {{ in_servers | list }}"
     - "We will delete these NTP Servers in {{ ansible_network_os | upper }}: {{ out_servers | list }}"
