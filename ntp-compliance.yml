@@ -8,6 +8,7 @@
     required_servers: []
     in_servers: []
     out_servers: []
+    ee_folder: /tmp
 
   tasks:
     - name: Read inputs and prepare configs
@@ -43,7 +44,7 @@
     - name: Save template to temporary file
       ansible.builtin.template:
         src: report.j2
-        dest: "{{ playbook_dir }}/temp.html"
+        dest: "{{ ee_folder }}/temp.html"
         mode: '0755'
       when: in_servers | length > 0 or out_servers | length > 0
 
@@ -51,7 +52,7 @@
     - name: Upload report to S3
       amazon.aws.aws_s3:
         bucket: "{{ my_bucket }}"
-        src: "{{ playbook_dir }}/temp.html"
+        src: "{{ ee_folder }}/temp.html"
         object: "index.html"
         mode: put
         metadata: 'Content-Type=text/html'
