@@ -20,3 +20,4 @@ I'm using this [ansible-inventory](https://github.com/nleiva/ansible-inventory/b
 - [Parse IOS XE SW Version](ios-genie-show-ver.md)
 - [Reading IP address ranges](ip_range.md)
 - [Show config differences](show-diff.md)
+- [Network resource modules in action](https://github.com/nleiva/ansible-net-modules)
