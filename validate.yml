@@ -12,21 +12,21 @@
     ansible_network_os: cisco.ios.ios
 
   tasks:
-  - name: Parse list of commands
-    include_tasks: validate_commands.yml
-    loop:
-      - show version
-      - show interfaces
-      - show lldp neighbors
-      - show ip bgp summary
-      - show ip ospf neighbor
-    loop_control:
-      loop_var: command
+    - name: Parse list of commands
+      include_tasks: validate_commands.yml
+      loop:
+        - show version
+        - show interfaces
+        - show lldp neighbors
+        - show ip bgp summary
+        - show ip ospf neighbor
+      loop_control:
+        loop_var: command
 
-  # - name: Print all structured data
-  #   ansible.builtin.debug:
-  #     var: my_dict
+    # - name: Print all structured data
+    #   ansible.builtin.debug:
+    #     var: my_dict
 
-  - name: Validate state from commands
-    include_tasks: validate_state.yml
+    - name: Validate state from commands
+      include_tasks: validate_state.yml
 ...

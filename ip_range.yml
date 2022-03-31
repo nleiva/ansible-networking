@@ -10,7 +10,7 @@
   vars:
     input: "{{ lookup('file','files/ip_addresses.json') | from_json }}"
     test_list: ['192.0.2.18', 'host.fqdn', '::1', '192.168.32.0/24', 'fe80::100/10',
-      '2001:db8:cafe::f00/64', True, '', '42540766412265424405338506004571095040/64']
+                '2001:db8:cafe::f00/64', true, '', '42540766412265424405338506004571095040/64']
 
   tasks:
     - name: Create IPv4 List
@@ -23,35 +23,35 @@
 
     - name: TEST 1
       block:
-      - name: Loop over IPv4 addresses
-        debug:
-          msg: "{{ item.ip_prefix }}"
-        with_items: "{{ ipv4_list }}"
+        - name: Loop over IPv4 addresses
+          debug:
+            msg: "{{ item.ip_prefix }}"
+          with_items: "{{ ipv4_list }}"
 
     - name: TEST 2
       block:
-      - name: Print first and last ip of an IPv4 range (query by index number)
-        debug:
-          msg: "{{ item.ip_prefix | ipaddr('1') | ipv4('address') }}-{{ item.ip_prefix | ipaddr('-1') | ipv4('address') }}"
-        with_items: "{{ ipv4_list }}"
+        - name: Print first and last ip of an IPv4 range (query by index number)
+          debug:
+            msg: "{{ item.ip_prefix | ipaddr('1') | ipv4('address') }}-{{ item.ip_prefix | ipaddr('-1') | ipv4('address') }}"
+          with_items: "{{ ipv4_list }}"
 
     - name: TEST 3
       block:
-      - name: Print first and last ip of an IPv6 range (query by index number)
-        debug:
-          msg: "{{ item.ipv6_prefix | ipaddr('1') | ipv6('address') }}-{{ item.ipv6_prefix | ipaddr('-1') | ipv6('address') }}"
-        with_items: "{{ ipv6_list }}"
+        - name: Print first and last ip of an IPv6 range (query by index number)
+          debug:
+            msg: "{{ item.ipv6_prefix | ipaddr('1') | ipv6('address') }}-{{ item.ipv6_prefix | ipaddr('-1') | ipv6('address') }}"
+          with_items: "{{ ipv6_list }}"
 
     - name: TEST 4
       block:
-      - name: Check if values in 'test_list' are in the range of an IPv4 prefix
-        debug:
-          msg: "{{ test_list | ipaddr(item.ip_prefix) }}"
-        with_items: "{{ ipv4_list }}"
+        - name: Check if values in 'test_list' are in the range of an IPv4 prefix
+          debug:
+            msg: "{{ test_list | ipaddr(item.ip_prefix) }}"
+          with_items: "{{ ipv4_list }}"
 
     - name: TEST 5
       block:
-      - name: Check if values in 'test_list' are in the range of an IPv6 prefix
-        debug:
-          msg: "{{ test_list | ipaddr(item.ipv6_prefix) }}"
-        with_items: "{{ ipv6_list }}"
+        - name: Check if values in 'test_list' are in the range of an IPv6 prefix
+          debug:
+            msg: "{{ test_list | ipaddr(item.ipv6_prefix) }}"
+          with_items: "{{ ipv6_list }}"

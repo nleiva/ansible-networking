@@ -1,0 +1,13 @@
+# exclude_paths included in this file are parsed relative to this file's location
+exclude_paths:
+  - roles/backup
+  - roles/restore
+  - .github/workflows
+
+# This makes linter to fully ignore rules/tags listed below
+skip_list:
+  - unpredictability
+
+# This makes the linter display but not fail for rules/tags listed below:
+warn_list:
+  - git-latest

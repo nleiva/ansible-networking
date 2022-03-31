@@ -7,7 +7,7 @@
   tasks:
     - name: Capture SHOW COMMAND
       cli_command:
-        command:  "{{ my_cmd }}"
+        command: "{{ my_cmd }}"
       register: cmd_output
 
     - name: Display OUTPUT, line by line

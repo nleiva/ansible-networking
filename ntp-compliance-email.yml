@@ -23,18 +23,18 @@
 
     # Adds NTP server entries in the my_ntp_servers variable if the variable erase is false
     - block:
-      - name: Compare NTP servers and remove erroneous entries
-        cli_config:
-          config: no {{ item }}
-        loop: "{{ configured_servers }}"
-        when:
-          - configured_servers | length > 0
-          - item not in required_servers
+        - name: Compare NTP servers and remove erroneous entries
+          cli_config:
+            config: no {{ item }}
+          loop: "{{ configured_servers }}"
+          when:
+            - configured_servers | length > 0
+            - item not in required_servers
 
-      - name: Ensure intended NTP servers are present
-        cli_config:
-          config: "{{ item }}"
-        loop: "{{ required_servers }}"
+        - name: Ensure intended NTP servers are present
+          cli_config:
+            config: "{{ item }}"
+          loop: "{{ required_servers }}"
       when:
         - not erase|bool
         - make_changes

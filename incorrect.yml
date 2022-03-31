@@ -4,6 +4,6 @@
   connection: local
 
   tasks:
-  - name: Print Tower user
-    debug:
-      msg: '{{ tower_user_name }}'
+    - name: Print Tower user
+      debug:
+        msg: '{{ tower_user_name }}'

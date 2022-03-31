@@ -6,8 +6,8 @@
 
 - name: Meraki Test
   hosts: localhost
-  gather_facts: no
-  #debugger: on_failed
+  gather_facts: false
+  # debugger: on_failed
   collections:
     - cisco.meraki
 

@@ -1,6 +1,6 @@
 ---
 # ansible-galaxy collection install ansible.utils
-# ansible-playbook test-json.yml 
+# ansible-playbook test-json.yml
 
 - name: Play around with JSON inputs
   hosts: localhost
@@ -21,49 +21,49 @@
 
     - name: Print out flatten interfaces input
       debug:
-        msg:  "{{ lookup('ansible.utils.to_paths', interfaces) }}"
+        msg: "{{ lookup('ansible.utils.to_paths', interfaces) }}"
 
     - name: TEST 1
       block:
-      - name: Loop over interfaces
-        include_tasks: test-json-tasks-1.yml
-        with_items: "{{ interfaces | dict2items }}"
+        - name: Loop over interfaces
+          include_tasks: test-json-tasks-1.yml
+          with_items: "{{ interfaces | dict2items }}"
 
     - name: TEST 2
       block:
-      - name: Create neighbors dictionary (this is now per interface)
-        set_fact:
-          neighbors: "{{ interfaces | json_query('*.neighbors') }}"
+        - name: Create neighbors dictionary (this is now per interface)
+          set_fact:
+            neighbors: "{{ interfaces | json_query('*.neighbors') }}"
 
-      - name: Print out neighbors
-        debug:
-          msg: "{{ neighbors }}"
+        - name: Print out neighbors
+          debug:
+            msg: "{{ neighbors }}"
 
-      - name: Loop over neighbors
-        include_tasks: test-json-tasks-2.yml
-        with_items: "{{ neighbors }}"
-        loop_control:
-          loop_var: data
+        - name: Loop over neighbors
+          include_tasks: test-json-tasks-2.yml
+          with_items: "{{ neighbors }}"
+          loop_control:
+            loop_var: data
 
     - name: TEST 3
       block:
-      - name: Loop over neighbors
-        include_tasks: test-json-tasks-3.yml
-        with_items: "{{ neighbors }}"
-        loop_control:
-          loop_var: data
+        - name: Loop over neighbors
+          include_tasks: test-json-tasks-3.yml
+          with_items: "{{ neighbors }}"
+          loop_control:
+            loop_var: data
 
     - name: TEST 4
       block:
-      - name: Loop with deep json_query
-        debug:
-          var: "{{ item }}"
-        with_items: "{{ input | json_query('parsed.interfaces.*.neighbors[].*.[address, state]') }}"
+        - name: Loop with deep json_query
+          debug:
+            var: "{{ item }}"
+          with_items: "{{ input | json_query('parsed.interfaces.*.neighbors[].*.[address, state]') }}"
 
     - name: TEST 5
       block:
-      - name: Loop over neighbors and validate data with a schema
-        include_tasks: test-json-tasks-4.yml
-        with_items: "{{ neighbors }}"
-        loop_control:
-          loop_var: data
+        - name: Loop over neighbors and validate data with a schema
+          include_tasks: test-json-tasks-4.yml
+          with_items: "{{ neighbors }}"
+          loop_control:
+            loop_var: data

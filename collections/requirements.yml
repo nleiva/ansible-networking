@@ -9,4 +9,3 @@ collections:
 # - name: f5networks.f5_modules
   - name: community.general
   - name: cisco.meraki
-    source: https://galaxy.ansible.com

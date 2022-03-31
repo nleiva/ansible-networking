@@ -1,5 +1,5 @@
 ---
-# ansible-playbook --ask-vault-pass use-encrypted-file.yml 
+# ansible-playbook --ask-vault-pass use-encrypted-file.yml
 
 - name: Using data from an encrypted file
   hosts: localhost

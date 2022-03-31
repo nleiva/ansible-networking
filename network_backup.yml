@@ -1,8 +1,8 @@
 ---
 - name: setup control node timestamp
   hosts: ansible
-  gather_facts: no
-  become: yes
+  gather_facts: false
+  become: true
   tasks:
     - name: create time stamp for play
       set_fact:
@@ -20,7 +20,7 @@
 
 - name: retrieve router configurations
   hosts: "{{ devices }}"
-  gather_facts: no
+  gather_facts: false
 
   tasks:
     - name: backup configuration
