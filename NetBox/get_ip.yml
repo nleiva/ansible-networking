@@ -1,0 +1,51 @@
+# ansible-playbook get_ip.yml --skip-tags=debug
+# recycled from: https://josh-v.com/netbox_ansible_allocate_prefix_ipaddress/
+---
+- name: Manage NetBox
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  vars:
+    primary_prefix: "172.16.0.0/16"
+
+  tasks:
+    - name: Get a new /24 inside {{ primary_prefix }} within NetBox
+      netbox.netbox.netbox_prefix:
+        netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+        netbox_token: "{{ lookup('env', 'NETBOX_TOKEN') }}"
+        data:
+          parent: "{{ primary_prefix }}"
+          prefix_length: 24
+        state: present
+        first_available: true
+      register: prefix_info
+
+    - name: Print return information from the previous task
+      ansible.builtin.debug:
+        var: prefix_info
+      tags: debug
+
+    - name: Allocate IP address from new range
+      netbox.netbox.netbox_ip_address:
+        netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+        netbox_token: "{{ lookup('env', 'NETBOX_TOKEN') }}"
+        data:
+          prefix: "{{ prefix_info['prefix']['prefix'] }}"
+        state: new
+      register: ip_address_info
+
+    - name: Print return information from the previous task
+      ansible.builtin.debug:
+        var: ip_address_info
+      tags: debug
+
+    - name: Create variables with IP information
+      ansible.builtin.set_fact:
+        ip_address: "{{ ip_address_info['ip_address']['address'] | ansible.utils.ipaddr('ip')  }}"
+        netmask: "{{ ip_address_info['ip_address']['address'] | ansible.utils.ipaddr('netmask') }}"
+
+    - name: Print return information from the previous task
+      ansible.builtin.debug:
+        msg:
+          - "IP: {{ ip_address }}"
+          - "Mask: {{ netmask }}"

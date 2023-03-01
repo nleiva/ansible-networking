@@ -3,3 +3,4 @@ test
 temp.*
 hosts
 backup/ios*
+NetBox/credentials.sh
