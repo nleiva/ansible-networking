@@ -12,9 +12,10 @@ I'm using this [ansible-inventory](https://github.com/nleiva/ansible-inventory/b
 
 - [Collect a command output](collect-command.md)
 - [F5 Address list](F5/address_list.md)
-- [Get IP address from NetBox](NetBox/nb.md)
+- [Get IP address from NetBox](NetBox/get_ip.md)
 - [Meraki](meraki.md)
 - [Multi-line Config](multi-line-config.md)
+- [NetBox lookup](NetBox/lookup.md)
 - [NTP Compliance](ntp-compliance.md)
 - [Parse JSON outputs](test-json.md)
 - [Parse IOS XE ACLs](ios-genie-show-acl.md)

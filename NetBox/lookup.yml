@@ -1,0 +1,29 @@
+# ansible-playbook lookup.yml --skip-tags=debug
+# recycled from: https://josh-v.com/netbox_ansible_collection/netbox-ansible-lookup-plugin/
+---
+- name: Manage NetBox
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  vars:
+    netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+    netbox_token: "{{ lookup('env', 'NETBOX_TOKEN') }}"
+
+  tasks:
+    - name: Get list of sites
+      ansible.builtin.set_fact:
+        sites: "{{ query('netbox.netbox.nb_lookup', 'sites', api_endpoint=netbox_url, token=netbox_token) }}"
+
+    - name: Clean up the output
+      ansible.builtin.debug:
+        msg: "{{ sites | community.general.json_query('[*].value.name') }}"
+
+    - name: Get list of devices with role Core Switch at MDF (ncsu-065) or DM-Buffalo (dm-buffalo) sites
+      ansible.builtin.set_fact:
+        devices: |
+          {{ query('netbox.netbox.nb_lookup', 'devices', api_filter='site=ncsu-065 site=dm-buffalo
+          role=core-switch', api_endpoint=netbox_url, token=netbox_token) }}
+
+    - name: Print the result
+      ansible.builtin.debug:
+        msg: "{{ devices | json_query('[*].value.name') }}"
