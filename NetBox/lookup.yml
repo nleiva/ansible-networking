@@ -26,4 +26,4 @@
 
     - name: Print the result
       ansible.builtin.debug:
-        msg: "{{ devices | json_query('[*].value.name') }}"
+        msg: "{{ devices | community.general.json_query('[*].value.name') }}"

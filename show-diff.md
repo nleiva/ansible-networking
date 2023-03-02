@@ -1,47 +1,72 @@
 # Check config diff
 
-## Variables requiered
+## Dependencies
 
-- `my_devices`: One or more groups or host patterns, separated by colons. 
-- `my_facts`: Whether to collect facts per device: `yes` or `no`.
+### Collections
 
-## Playbook
+Install `cisco.ios`.
+
+```bash
+ansible-galaxy collection install cisco.ios
+```
+
+## Tasks
 
 Latest version -> [show-diff](show-diff.yml). The following output might be outdated.
 
 ```yaml
-  hosts: "{{ my_devices }}"
-  gather_facts: "{{ my_facts }}"
- 
-  tasks:
-    - name: Backup the config, make changes and then look at the diff
-      block:
-        - name: Backup the config [{{ ansible_network_os | default("unknown OS") }}]
-          ios_config:
-            backup: yes
-          register: config_output
-          
-        - name: Print debug message [{{ ansible_network_os | default("unknown OS") }}]
-          debug:
-            msg: "Backup generated {{ config_output.date }} at {{ config_output.time }}"
+- name: Backup the config
+  cisco.ios.ios_config:
+    backup: true
+  register: config_output
 
-        - name: Load new acl into device
-          ios_config:
-            lines:
-              - 10 permit ip host 192.0.2.1 any log
-              - 20 permit ip host 192.0.2.2 any log
-              - 30 permit ip host 192.0.2.3 any log
-              - 40 permit ip host 192.0.2.4 any log
-              - 50 permit ip host 192.0.2.5 any log
-            parents: ip access-list extended test
-            before: no ip access-list extended test
-            match: exact
+- name: Print debug message
+  ansible.builtin.debug:
+    msg: "Backup generated {{ config_output.date }} at {{ config_output.time }}"
+  tags: debug
 
-        - name: Check the running-config against backup config
-          ios_config:
-            diff_against: intended
-            intended_config: "{{ lookup('file', 'config_output.backup_path') }}"
-      when: ansible_net_system == "ios"
+- name: Configure ACL on Cisco IOS device using ios_config module
+  cisco.ios.ios_config:
+    lines:
+      - 10 permit ip host 192.0.2.1 any log
+      - 20 permit ip host 192.0.2.2 any log
+      - 30 permit ip host 192.0.2.3 any log
+      - 40 permit ip host 192.0.2.4 any log
+      - 50 permit ip host 192.0.2.5 any log
+    parents: ip access-list extended ACL-Ansible-CLI
+    before: no ip access-list extended test
+    match: exact
+    save_when: modified
+
+- name: Configure ACL on Cisco IOS device using ios_acls module
+  cisco.ios.ios_acls:
+    state: replaced
+    config:
+      - afi: ipv4
+        acls:
+          - name: ACL-Ansible-RM
+            aces:
+              - sequence: 10
+                grant: deny
+                source:
+                  any: true
+                destination:
+                  address: 198.51.100.0
+                  wildcard_bits: 0.0.0.255
+                protocol: tcp
+              - sequence: 20
+                grant: permit
+                source:
+                  any: true
+                destination:
+                  any: true
+                protocol: tcp
+
+- name: Compare the Cisco IOS running-config to backup config
+  cisco.ios.ios_config:
+    diff_against: intended
+    intended_config: "{{ lookup('file', '{{ config_output.backup_path }}') }}"
+  register: diff
 ```
 
 ## Output
@@ -49,46 +74,49 @@ Latest version -> [show-diff](show-diff.yml). The following output might be outd
 The following output might be outdated.
 
 ```bash
-⇨  ansible-playbook -i hosts --diff show-diff.yml -e "my_devices=ios, my_facts=yes"
+⇨  ansible-playbook --diff show-diff.yml
 
-PLAY [ios,] ****************************************************************************************************************************************************
+PLAY [ios] *******************************************************************************************************************
 
-TASK [Gathering Facts] *****************************************************************************************************************************************
-[WARNING]: Ignoring timeout(10) for ios_facts
-[WARNING]: default value for `gather_subset` will be changed to `min` from `!config` v2.11 onwards
-ok: [ios-xe-mgmt-latest.cisco.com]
+TASK [Backup the config] *****************************************************************************************************
+changed: [sandbox-iosxe-latest-1.cisco.com]
 
-TASK [Backup the config [ios]] *********************************************************************************************************************************
-changed: [ios-xe-mgmt-latest.cisco.com]
+TASK [Print debug message] ***************************************************************************************************
+ok: [sandbox-iosxe-latest-1.cisco.com] => 
+  msg: Backup generated 2023-03-02 at 12:49:35
 
-TASK [Print debug message [ios]] *******************************************************************************************************************************
-ok: [ios-xe-mgmt-latest.cisco.com] => {
-    "msg": "Backup generated 2020-07-08 at 09:28:34"
-}
+TASK [Configure ACL on Cisco IOS device using ios_config module] *************************************************************
+[WARNING]: To ensure idempotency and correct diff the input configuration lines should be similar to how they appear if
+present in the running configuration on device
+changed: [sandbox-iosxe-latest-1.cisco.com]
 
-TASK [Load new acl into device] ********************************************************************************************************************************
-changed: [ios-xe-mgmt-latest.cisco.com]
+TASK [Configure ACL on Cisco IOS device using ios_acls module] ***************************************************************
+changed: [sandbox-iosxe-latest-1.cisco.com]
 
-TASK [Check the running-config against backup config] **********************************************************************************************************
+TASK [Compare the Cisco IOS running-config to backup config] *****************************************************************
 --- before
 +++ after
-@@ -131,12 +131,6 @@
+@@ -148,15 +148,12 @@
  ip ssh rsa keypair-name ssh-key
  ip ssh version 2
  ip scp server enable
--ip access-list extended test
-- permit ip host 192.0.2.1 any log
-- permit ip host 192.0.2.2 any log
-- permit ip host 192.0.2.3 any log
-- permit ip host 192.0.2.4 any log
-- permit ip host 192.0.2.5 any log
+-ip access-list extended ACL-Ansible-CLI
++ip access-list extended test
+  10 permit ip host 192.0.2.1 any log
+  20 permit ip host 192.0.2.2 any log
+  30 permit ip host 192.0.2.3 any log
+  40 permit ip host 192.0.2.4 any log
+  50 permit ip host 192.0.2.5 any log
+-ip access-list extended ACL-Ansible-RM
+- 10 deny   tcp any 198.51.100.0 0.0.0.255
+- 20 permit tcp any any
  control-plane
- banner login ^C
- Built with Ansible
+ banner motd ^C
+ Welcome to the DevNet Sandbox for CSR1000v and IOS XE
 
-changed: [ios-xe-mgmt-latest.cisco.com]
+changed: [sandbox-iosxe-latest-1.cisco.com]
 
-PLAY RECAP *****************************************************************************************************************************************************
-ios-xe-mgmt-latest.cisco.com : ok=5    changed=3    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0  
+PLAY RECAP *******************************************************************************************************************
+sandbox-iosxe-latest-1.cisco.com : ok=5    changed=4    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0 
 ```
 

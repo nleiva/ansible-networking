@@ -2,5 +2,5 @@ private.pem
 test
 temp.*
 hosts
-backup/ios*
+backup/*
 NetBox/credentials.sh

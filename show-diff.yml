@@ -1,40 +1,62 @@
----
-# ansible-playbook -i hosts --diff show-diff.yml -e "my_devices=ios, my_facts=yes"
--
-  hosts: "{{ my_devices }}"
-  gather_facts: "{{ my_facts }}"
+# ansible-playbook --diff show-diff.yml
+
+- hosts: ios
+  gather_facts: false
 
   tasks:
     - name: Backup the config, make changes and then look at the diff
       block:
-        - name: Backup the config [{{ ansible_network_os | default("unknown OS") }}]
-          ios_config:
+        - name: Backup the config
+          cisco.ios.ios_config:
             backup: true
           register: config_output
 
-        - name: Print debug message [{{ ansible_network_os | default("unknown OS") }}]
-          debug:
+        - name: Print debug message
+          ansible.builtin.debug:
             msg: "Backup generated {{ config_output.date }} at {{ config_output.time }}"
+          tags: debug
 
-        - name: Load new acl into device
-          ios_config:
+        - name: Configure ACL on Cisco IOS device using ios_config module
+          cisco.ios.ios_config:
             lines:
               - 10 permit ip host 192.0.2.1 any log
               - 20 permit ip host 192.0.2.2 any log
               - 30 permit ip host 192.0.2.3 any log
               - 40 permit ip host 192.0.2.4 any log
               - 50 permit ip host 192.0.2.5 any log
-            parents: ip access-list extended test
+            parents: ip access-list extended ACL-Ansible-CLI
             before: no ip access-list extended test
             match: exact
             save_when: modified
 
-        - name: Check the running-config against backup config
-          ios_config:
+        - name: Configure ACL on Cisco IOS device using ios_acls module
+          cisco.ios.ios_acls:
+            state: replaced
+            config:
+              - afi: ipv4
+                acls:
+                  - name: ACL-Ansible-RM
+                    aces:
+                      - sequence: 10
+                        grant: deny
+                        source:
+                          any: true
+                        destination:
+                          address: 198.51.100.0
+                          wildcard_bits: 0.0.0.255
+                        protocol: tcp
+                      - sequence: 20
+                        grant: permit
+                        source:
+                          any: true
+                        destination:
+                          any: true
+                        protocol: tcp
+
+        - name: Compare the Cisco IOS running-config to backup config
+          cisco.ios.ios_config:
             diff_against: intended
             intended_config: "{{ lookup('file', '{{ config_output.backup_path }}') }}"
           register: diff
 
-      when: ansible_net_system == "ios"
-
-...
+      when: ansible_network_os == 'cisco.ios.ios'

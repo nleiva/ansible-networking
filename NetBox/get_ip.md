@@ -1,8 +1,8 @@
 # NetBox
 
-## Variables required
+## Dependencies
 
-### Dependencies
+### Collections
 
 Install `netbox.netbox` and `ansible.utils`.
 ```bash
