@@ -1,0 +1,14 @@
+[
+    {
+      "name": "Gig0/0/21",
+      "enabled": false
+    },
+    {
+      "name": "Gig0/0/22",
+      "enabled": true
+    },
+    {
+      "name": "Vlan",
+      "enabled": false
+    }
+]

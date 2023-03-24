@@ -1,0 +1,31 @@
+# ansible-playbook test-list.yml
+
+- name: Create sub-list
+  hosts: localhost
+  connection: local
+  become: false
+  gather_facts: false
+  vars:
+    input: "{{ lookup('file','list.json') | from_json }}"
+    interfacelist: []
+
+  tasks:
+    - name: Create interfaces Dictionary
+      ansible.builtin.set_fact:
+        interfaces: "{{ input }}"
+
+    - name: Print out interfaces
+      ansible.builtin.debug:
+        var: item
+      when: not item.enabled and 'Gig' in item.name
+      with_items: "{{ interfaces }}"
+
+    - name: Create list with items in variable interfaces which enable is false
+      ansible.builtin.set_fact:
+        interfacelist: "{{ interfacelist + [item.name] }}"
+      when: not item.enabled and 'Gig' in item.name
+      with_items: "{{ interfaces }}"
+
+    - name: Print out interfaces variable
+      ansible.builtin.debug:
+        var: interfacelist
