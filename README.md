@@ -20,6 +20,7 @@ I'm using this [ansible-inventory](https://github.com/nleiva/ansible-inventory/b
 - [Parse JSON outputs](test-json.md)
 - [Parse IOS XE ACLs](ios-genie-show-acl.md)
 - [Parse IOS XE SW Version](ios-genie-show-ver.md)
+- [Parsing a Cisco ASA config file](https://github.com/nleiva/ansible-parsing-cisco-asa): Three options to parse data from an unstructured config file.
 - [Reading IP address ranges](ip_range.md)
 - [Show config differences](show-diff.md)
 - [Network resource modules in action](https://github.com/nleiva/ansible-net-modules)
