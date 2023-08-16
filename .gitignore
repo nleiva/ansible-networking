@@ -4,3 +4,4 @@ temp.*
 hosts
 backup/*
 NetBox/credentials.sh
+.vscode

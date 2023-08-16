@@ -16,11 +16,14 @@
       delegate_to: localhost
       register: orgs
 
-    - ansible.builtin.debug:
-        var: orgs.data[3]
+    - name: Print name of all available organizations
+      ansible.builtin.debug:
+        var: item.name
+      loop: "{{ orgs.data }}"  
 
-    - ansible.builtin.set_fact:
-        org_name: "{{ orgs.data[3].name }}"
+    - name: Select one organization ({{ orgs.data[0].name }})
+      ansible.builtin.set_fact:
+        org_name: "{{ orgs.data[0].name }}"
 
     - name: Query all devices in organization {{ org_name }}
       cisco.meraki.meraki_device:
@@ -29,7 +32,8 @@
         state: query
       register: devices
 
-    - ansible.builtin.debug:
+    - name: Print all devices in organization {{ org_name }}
+      ansible.builtin.debug:
         var: devices
 
     # - name: Query management information
