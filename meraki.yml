@@ -21,9 +21,14 @@
         var: item.name
       loop: "{{ orgs.data }}"  
 
-    - name: Select one organization ({{ orgs.data[0].name }})
+    - name: Select one organization
       ansible.builtin.set_fact:
-        org_name: "{{ orgs.data[0].name }}"
+        organization: "{{ orgs.data[0].name }}"
+        cacheable: yes
+
+    - name: Print orn name test {{ organization }}
+      ansible.builtin.debug:
+        var: organization
 
     - name: Query all devices in organization {{ org_name }}
       cisco.meraki.meraki_device:
@@ -83,8 +88,9 @@
         state: query
       register: nets
 
-    # - ansible.builtin.debug:
-    #     var: nets
+    - name: Print out one network
+      ansible.builtin.debug:
+        var: nets.data[0]
 
     - name: Query network named {{ nets.data[0].name }} in the {{ org_name }} organization
       cisco.meraki.meraki_network:
@@ -94,8 +100,9 @@
         state: query
       register: net
 
-    # - ansible.builtin.debug:
-    #     var: net
+    - name: Print out network data
+      ansible.builtin.debug:
+        var: net
 
     - name: Query syslog configurations on network named {{ nets.data[0].name }} in the {{ org_name }} organization
       cisco.meraki.meraki_syslog:
