@@ -20,7 +20,7 @@
       register: orgs
 
     - debug:
-        var: orgs.data[2]
+        var: orgs.data
 
     - name: Query all devices in organization {{ org_name }}
       meraki_device:
