@@ -7,33 +7,33 @@
 - name: Meraki Test
   hosts: localhost
   gather_facts: false
-  # debugger: on_failed
-  collections:
-    - cisco.meraki
 
   tasks:
     - name: Query information about all organizations associated to the API user
-      meraki_organization:
+      cisco.meraki.meraki_organization:
         auth_key: "{{ api_key }}"
         state: query
       delegate_to: localhost
       register: orgs
 
-    - debug:
-        var: orgs.data
+    - ansible.builtin.debug:
+        var: orgs.data[3]
+
+    - ansible.builtin.set_fact:
+        org_name: "{{ orgs.data[3].name }}"
 
     - name: Query all devices in organization {{ org_name }}
-      meraki_device:
+      cisco.meraki.meraki_device:
         auth_key: "{{ api_key }}"
         org_name: "{{ org_name }}"
         state: query
       register: devices
 
-    - debug:
+    - ansible.builtin.debug:
         var: devices
 
     # - name: Query management information
-    #   meraki_management_interface:
+    #   cisco.meraki.meraki_management_interface:
     #     auth_key: "{{ api_key }}"
     #     org_name: "{{ org_name }}"
     #     state: query
@@ -41,7 +41,7 @@
     #     serial: "{{ devices.data[16].serial }}"
     #   register: mgmt
 
-    # - debug:
+    # - ansible.builtin.debug:
     #     var: mgmt
 
     # - name: Create a new organization named {{ org_name }}
@@ -52,60 +52,60 @@
     #   delegate_to: localhost
 
     - name: Query information about all administrators associated to the organization {{ org_name }}
-      meraki_admin:
+      cisco.meraki.meraki_admin:
         auth_key: "{{ api_key }}"
         org_name: "{{ org_name }}"
         state: query
       register: admins
 
-    - debug:
+    - ansible.builtin.debug:
         msg: "{{ admins }}"
         # msg: " {{ admins.data[3].name }} at {{ admins.data[3].email }} has API Key -> {{ admins.data[3].has_api_key }}"
 
     - name: Query SNMP settings in the {{ org_name }} organization
-      meraki_snmp:
+      cisco.meraki.meraki_snmp:
         auth_key: "{{ api_key }}"
         org_name: "{{ org_name }}"
         state: query
       register: snmp
 
-    - debug:
+    - ansible.builtin.debug:
         var: snmp
 
     - name: List all networks associated to the {{ org_name }} organization
-      meraki_network:
+      cisco.meraki.meraki_network:
         auth_key: "{{ api_key }}"
         org_name: "{{ org_name }}"
         state: query
       register: nets
 
-    # - debug:
+    # - ansible.builtin.debug:
     #     var: nets
 
     - name: Query network named {{ nets.data[0].name }} in the {{ org_name }} organization
-      meraki_network:
+      cisco.meraki.meraki_network:
         auth_key: "{{ api_key }}"
         org_name: "{{ org_name }}"
         net_name: "{{ nets.data[0].name }}"
         state: query
       register: net
 
-    # - debug:
+    # - ansible.builtin.debug:
     #     var: net
 
     - name: Query syslog configurations on network named {{ nets.data[0].name }} in the {{ org_name }} organization
-      meraki_syslog:
+      cisco.meraki.meraki_syslog:
         auth_key: "{{ api_key }}"
         org_name: "{{ org_name }}"
         net_name: "{{ nets.data[0].name }}"
         state: query
       register: syslog
 
-    - debug:
+    - ansible.builtin.debug:
         var: syslog
 
     # - name: Enable VLANs on network {{ nets.data[0].name }}
-    #   meraki_network:
+    #   cisco.meraki.meraki_network:
     #     auth_key: "{{ api_key }}"
     #     org_name: "{{ org_name }}"
     #     net_name: "{{ nets.data[0].name }}"
@@ -113,29 +113,29 @@
     #     enable_vlans: yes
 
     # - name: Query all VLANs on network {{ nets.data[0].name }}
-    #   meraki_vlan:
+    #   cisco.meraki.meraki_vlan:
     #     auth_key: "{{ api_key }}"
     #     org_name: "{{ org_name }}"
     #     net_name: "{{ nets.data[0].name }}"
     #     state: query
     #   register: vlans
 
-    # - debug:
+    # - ansible.builtin.debug:
     #     var: vlans
 
     - name: List SSID(s) on network {{ nets.data[0].name }}
-      meraki_ssid:
+      cisco.meraki.meraki_ssid:
         auth_key: "{{ api_key }}"
         org_name: "{{ org_name }}"
         net_name: "{{ nets.data[0].name }}"
         state: query
       register: ssids
 
-    - debug:
+    - ansible.builtin.debug:
         var: ssids.data[0]
 
     # - name: Enable click-through splash page on {{ ssids.data[0].name }}
-    #   meraki_ssid:
+    #   cisco.meraki.meraki_ssid:
     #     auth_key: "{{ api_key }}"
     #     org_name: "{{ org_name }}"
     #     net_name: "{{ nets.data[0].name }}"
