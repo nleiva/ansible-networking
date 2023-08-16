@@ -30,7 +30,7 @@
       register: devices
 
     - debug:
-        var: devices.data[16]
+        var: devices
 
     # - name: Query management information
     #   meraki_management_interface:
@@ -59,7 +59,8 @@
       register: admins
 
     - debug:
-        msg: " {{ admins.data[3].name }} at {{ admins.data[3].email }} has API Key -> {{ admins.data[3].has_api_key }}"
+        msg: "{{ admins }}"
+        # msg: " {{ admins.data[3].name }} at {{ admins.data[3].email }} has API Key -> {{ admins.data[3].has_api_key }}"
 
     - name: Query SNMP settings in the {{ org_name }} organization
       meraki_snmp:
